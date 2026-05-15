@@ -314,6 +314,52 @@
     opacity: 0.7;
   }
 
+  .belt-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    gap: 8px;
+  }
+  .belt-card { position: relative; display: flex; }
+  .belt-card input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .belt-card label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 8px 9px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    background: #fff;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    text-align: center;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+  .belt-card label:hover { background: var(--primary-soft); border-color: var(--primary); }
+  .belt-card input:checked + label {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+    box-shadow: 0 0 0 2px rgba(139,44,44,0.18);
+    font-weight: 600;
+  }
+  .belt-visual {
+    width: 76px;
+    height: 20px;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+  .belt-kyu { font-size: 12px; font-weight: 700; color: var(--primary); }
+  .belt-color { font-size: 10px; color: var(--muted); line-height: 1.2; }
+
   .hidden { display: none !important; }
 
   @media (max-width: 600px) {
@@ -357,8 +403,8 @@
       </div>
 
       <div class="form-row">
-        <label>Kyu niveau filter</label>
-        <div class="checkbox-grid" id="kyu-checkboxes"></div>
+        <label>Gordel</label>
+        <div class="belt-selector" id="belt-selector"></div>
       </div>
 
       <div class="form-row">
@@ -559,6 +605,36 @@ const techniques = [
 ];
 
 const categories = [...new Set(techniques.map(t => t.cat))];
+
+const belts = [
+  { value: "all", label: "Alle banden",          color: "",                      base: null,      stripes: [] },
+  { value: 9,     label: "9e Kyu",               color: "Wit / zwarte streep",   base: "#e8e8e8", stripes: ["#222"] },
+  { value: 8,     label: "8e Kyu",               color: "Geel",                  base: "#f0c020", stripes: [] },
+  { value: 7,     label: "7e Kyu",               color: "Geel / zwarte streep",  base: "#f0c020", stripes: ["#222"] },
+  { value: 6,     label: "6e Kyu",               color: "Oranje",                base: "#e87020", stripes: [] },
+  { value: 5,     label: "5e Kyu",               color: "Groen",                 base: "#3a8c45", stripes: [] },
+  { value: 4,     label: "4e Kyu",               color: "Blauw",                 base: "#2255a4", stripes: [] },
+  { value: 3,     label: "3e Kyu",               color: "Bruin / 1 streep",      base: "#6b3a20", stripes: ["#fff"] },
+  { value: 2,     label: "2e Kyu",               color: "Bruin / 2 strepen",     base: "#6b3a20", stripes: ["#fff","#fff"] },
+  { value: 1,     label: "1e Kyu",               color: "Bruin / 3 strepen",     base: "#6b3a20", stripes: ["#fff","#fff","#fff"] },
+];
+
+function createBeltVisual(belt) {
+  const el = document.createElement("div");
+  el.className = "belt-visual";
+  if (!belt.base) {
+    el.style.background = "linear-gradient(to right,#e8e8e8 10%,#f0c020 22%,#e87020 38%,#3a8c45 52%,#2255a4 66%,#6b3a20 100%)";
+    return el;
+  }
+  el.style.backgroundColor = belt.base;
+  belt.stripes.forEach((color, i) => {
+    const s = document.createElement("div");
+    s.style.cssText = `position:absolute;top:0;bottom:0;width:5px;background:${color};right:${(belt.stripes.length - i) * 9 + 4}px;`;
+    el.appendChild(s);
+  });
+  return el;
+}
+
 const qtypeLabels = {
   naam_to_omschrijving: "Naam → omschrijving",
   omschrijving_to_naam: "Omschrijving → naam",
@@ -661,10 +737,17 @@ function startQuiz() {
   if (selectedCats.length === 0) { alert("Kies minstens één categorie."); return; }
   if (selectedQtypes.length === 0) { alert("Kies minstens één vraagtype."); return; }
 
-  const selectedKyus = [...document.querySelectorAll("#kyu-checkboxes input:checked")].map(c => c.value === "null" ? null : parseInt(c.value));
-  if (selectedKyus.length === 0) { alert("Kies minstens één kyu niveau."); return; }
+  const selectedBelt = document.querySelector("#belt-selector input:checked")?.value ?? "all";
+  let allowedKyus = null;
+  if (selectedBelt !== "all") {
+    const target = parseInt(selectedBelt);
+    allowedKyus = Array.from({ length: 9 - target + 1 }, (_, i) => 9 - i);
+  }
 
-  const pool = techniques.filter(t => selectedCats.includes(t.cat) && selectedKyus.includes(t.kyu));
+  const pool = techniques.filter(t =>
+    selectedCats.includes(t.cat) &&
+    (allowedKyus === null || t.kyu === null || allowedKyus.includes(t.kyu))
+  );
   if (pool.length < 4) { alert("Te weinig technieken in selectie. Kies meer categorieën of kyu niveaus."); return; }
 
   // Generate questions
@@ -817,18 +900,32 @@ function init() {
     catEl.appendChild(lbl);
   });
 
-  const kyuEl = document.getElementById("kyu-checkboxes");
-  const allKyus = [...new Set(techniques.map(t => t.kyu))].sort((a, b) => {
-    if (a === null) return 1;
-    if (b === null) return -1;
-    return b - a;
-  });
-  allKyus.forEach(kyu => {
+  const beltEl = document.getElementById("belt-selector");
+  belts.forEach((belt, idx) => {
+    const card = document.createElement("div");
+    card.className = "belt-card";
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "belt-level";
+    input.id = `belt-${belt.value}`;
+    input.value = belt.value;
+    if (idx === 0) input.checked = true;
     const lbl = document.createElement("label");
-    const val = kyu === null ? "null" : kyu;
-    const display = kyu === null ? "Geen kyu (alle graden)" : `${kyu} Kyu`;
-    lbl.innerHTML = `<input type="checkbox" value="${val}" checked> ${display}`;
-    kyuEl.appendChild(lbl);
+    lbl.setAttribute("for", `belt-${belt.value}`);
+    lbl.appendChild(createBeltVisual(belt));
+    const kyuDiv = document.createElement("div");
+    kyuDiv.className = "belt-kyu";
+    kyuDiv.textContent = belt.label;
+    lbl.appendChild(kyuDiv);
+    if (belt.color) {
+      const colorDiv = document.createElement("div");
+      colorDiv.className = "belt-color";
+      colorDiv.textContent = belt.color;
+      lbl.appendChild(colorDiv);
+    }
+    card.appendChild(input);
+    card.appendChild(lbl);
+    beltEl.appendChild(card);
   });
 
   document.getElementById("start-btn").onclick = startQuiz;

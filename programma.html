@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examenprogramma — Fujiyama Hove</title>
+<style>
+:root {
+  --maroon: #800000;
+  --maroon-light: #f0e8e8;
+  --maroon-mid: #d0b0b0;
+  --text: #1a1a1a;
+  --muted: #555;
+  --border: #e8e0e0;
+  --bg: #f5f0ec;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+/* ── Layout ─────────────────────────────────────── */
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(0,0,0,.10);
+}
+
+/* ── Header ─────────────────────────────────────── */
+.doc-header {
+  background: var(--maroon);
+  color: #fff;
+  padding: 26px 36px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.doc-header h1 {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  line-height: 1.2;
+}
+.doc-header .sub {
+  font-size: 12px;
+  opacity: .78;
+  margin-top: 3px;
+}
+.doc-header .version {
+  font-size: 11px;
+  opacity: .65;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Intro bar ───────────────────────────────────── */
+.intro {
+  background: #fdf8f5;
+  border-left: 4px solid var(--maroon);
+  padding: 11px 36px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.65;
+}
+
+/* ── Controls (screen only) ─────────────────────── */
+.controls {
+  padding: 10px 36px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.controls label { font-size: 12px; font-weight: 600; color: var(--maroon); }
+.controls select {
+  padding: 4px 10px;
+  border: 1px solid var(--maroon-mid);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  background: #fff;
+}
+#filter-info { font-size: 11px; color: #999; }
+
+/* ── Belt legend (screen only) ─────────────────── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 10px 36px;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #555;
+}
+
+/* ── Main body ───────────────────────────────────── */
+.body { padding: 18px 36px 40px; }
+
+/* ── Chapter & section headings ─────────────────── */
+.chapter {
+  color: var(--maroon);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  margin: 26px 0 10px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--maroon);
+}
+.section {
+  color: var(--maroon);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin: 16px 0 6px;
+}
+
+/* ── Technique tables ────────────────────────────── */
+.tt {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 4px;
+}
+.tt thead th {
+  background: var(--maroon-light);
+  color: var(--maroon);
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  padding: 4px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--maroon-mid);
+}
+.tt td {
+  padding: 4.5px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.tt tbody tr:last-child td { border-bottom: none; }
+.tt tbody tr:hover { background: #fdf8f5; }
+.tt tr.hidden { display: none !important; }
+
+/* kyu badge */
+.kc { width: 40px; text-align: center; }
+.kb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 17px;
+  border-radius: 3px;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+.k9  { background: #fff; border: 1.5px solid #555; color: #333; }
+.k8  { background: #FFD700; border: 1.5px solid #FFD700; color: #222; }
+.k7  { background: #FFD700; border: 1.5px solid #555; color: #222; }
+.k6  { background: #FF8C00; border: 1.5px solid #FF8C00; color: #fff; }
+.k5  { background: #2e7d32; border: 1.5px solid #2e7d32; color: #fff; }
+.k4  { background: #1565c0; border: 1.5px solid #1565c0; color: #fff; }
+.k3  { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
+.k2  { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
+.k1  { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
+.kd  { background: #111; border: 1.5px solid #111; color: #fff; }
+
+/* technique name & description */
+.tn { font-weight: 600; font-size: 12.5px; width: 210px; }
+.td { color: var(--muted); font-size: 11.5px; }
+
+/* ── Vocabulary ──────────────────────────────────── */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 20px;
+  margin-top: 6px;
+}
+.vi {
+  display: flex;
+  gap: 8px;
+  padding: 3.5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.vt { font-weight: 600; min-width: 130px; color: var(--text); }
+.vd { color: var(--muted); font-size: 11.5px; }
+
+/* ── Footer ──────────────────────────────────────── */
+footer {
+  text-align: center;
+  font-size: 10px;
+  color: #bbb;
+  padding: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════════════════ */
+@media print {
+  body { background: #fff; font-size: 8.5pt; }
+
+  .wrap { max-width: 100%; margin: 0; box-shadow: none; }
+
+  .no-print { display: none !important; }
+
+  .doc-header {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 12px 18px 10px;
+  }
+  .doc-header h1 { font-size: 14pt; }
+  .doc-header .sub { font-size: 8.5pt; }
+
+  .intro { padding: 7px 18px; font-size: 7.5pt; }
+
+  .body { padding: 6px 18px 20px; }
+
+  .chapter {
+    font-size: 11pt;
+    margin: 12px 0 5px;
+    page-break-after: avoid;
+  }
+  .section {
+    font-size: 8pt;
+    margin: 8px 0 3px;
+    page-break-after: avoid;
+  }
+
+  .tt { font-size: 7.5pt; }
+  .tt thead th { padding: 2.5px 5px; font-size: 6.5pt; }
+  .tt td { padding: 2.5px 5px; }
+  .tt tbody tr { page-break-inside: avoid; }
+  .tt tbody tr:hover { background: none; }
+
+  .kb {
+    width: 20px; height: 14px; font-size: 7pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .tn { font-size: 7.5pt; width: 160px; }
+  .td { font-size: 7pt; }
+
+  .vocab-grid { grid-template-columns: 1fr 1fr; }
+  .vi { font-size: 7.5pt; padding: 2px 0; }
+  .vt { min-width: 110px; font-size: 7.5pt; }
+  .vd { font-size: 7pt; }
+
+  footer { font-size: 7pt; padding: 6px; }
+
+  .pb { page-break-before: always; }
+
+  @page { size: A4; margin: 11mm 13mm; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ─── HEADER ─────────────────────────────────────── -->
+<header class="doc-header">
+  <div>
+    <h1>Examenprogramma Fujiyama Hove</h1>
+    <div class="sub">Goju-Ryu Karate &nbsp;·&nbsp; VKA</div>
+  </div>
+  <div class="version">(versie 05.2026)</div>
+</header>
+
+<div class="intro">
+  Dit programma is een richtlijn. Slagen voor een examen omvat meer dan de kennis van individuele technieken.
+  Van elke individuele karateka wordt er verwacht dat er wordt gewerkt aan een steeds sterkere beheersing
+  van de basistechnieken en een consequente uitvoering met inzet (<em>kime</em>) en focus (<em>zanshin</em>).
+</div>
+
+<!-- ─── FILTER (screen only) ──────────────────────── -->
+<div class="controls no-print">
+  <label for="kyuFilter">Toon technieken voor examen:</label>
+  <select id="kyuFilter" onchange="filterKyu(this.value)">
+    <option value="0">— alles tonen —</option>
+    <option value="9">9e Kyu &nbsp;(wit + stripe)</option>
+    <option value="8">8e Kyu &nbsp;(geel)</option>
+    <option value="7">7e Kyu &nbsp;(geel + stripe)</option>
+    <option value="6">6e Kyu &nbsp;(oranje)</option>
+    <option value="5">5e Kyu &nbsp;(groen)</option>
+    <option value="4">4e Kyu &nbsp;(blauw)</option>
+    <option value="3">3e Kyu &nbsp;(bruin)</option>
+    <option value="2">2e Kyu &nbsp;(bruin + 2 strepen)</option>
+    <option value="1">1e Kyu &nbsp;(bruin + 3 strepen)</option>
+  </select>
+  <span id="filter-info"></span>
+</div>
+
+<!-- ─── BELT LEGEND (screen only) ─────────────────── -->
+<div class="legend no-print">
+  <div class="legend-item"><span class="kb k9">9</span> Wit + stripe</div>
+  <div class="legend-item"><span class="kb k8">8</span> Geel</div>
+  <div class="legend-item"><span class="kb k7">7</span> Geel + stripe</div>
+  <div class="legend-item"><span class="kb k6">6</span> Oranje</div>
+  <div class="legend-item"><span class="kb k5">5</span> Groen</div>
+  <div class="legend-item"><span class="kb k4">4</span> Blauw</div>
+  <div class="legend-item"><span class="kb k3">3</span> Bruin</div>
+  <div class="legend-item"><span class="kb k2">2</span> Bruin + 2</div>
+  <div class="legend-item"><span class="kb k1">1</span> Bruin + 3</div>
+  <div class="legend-item"><span class="kb kd">—</span> Dan (zwart)</div>
+</div>
+
+<div class="body">
+
+<!-- ═══════════════════════════════════════════════════
+     KIHON
+     ═══════════════════════════════════════════════════ -->
+<h2 class="chapter">KIHON</h2>
+
+<!-- Dachi Waza -->
+<h3 class="section">Standen — Dachi Waza</h3>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Techniek</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">HEIKO DACHI</td><td class="td">Stand voeten evenwijdig — Fudo Dachi.</td></tr>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">ZENKUTSU DACHI</td><td class="td">Voorwaartse leunende stand. Voeten naar voor. Voorste been gebogen, achterste been gestrekt.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">MUSUBI DACHI</td><td class="td">Formele stand om te groeten. Hielen samen.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">SANCHIN DACHI</td><td class="td">Basisstand op schouderbreedte. Voeten wijzen naar binnen.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">HEISOKU DACHI</td><td class="td">Stand met voeten samen.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">SHIKO DACHI</td><td class="td">Wijde stand, voeten buitenwaarts gericht. Kniën boven hielen.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">NEKO ASHI DACHI</td><td class="td">Katstand.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">SOTO HACHI MONJI DACHI</td><td class="td">Vanuit heiko dachi voeten buitenwaarts — Joi dachi.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">UCHI HACHI MONJI DACHI</td><td class="td">Vanuit shiko dachi voeten binnenwaarts zetten.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">HAN ZENKUTSU DACHI</td><td class="td">Korte voorwaartse leunende stand.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">KOKUTSU DACHI</td><td class="td">Achterwaartse leunende stand.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">HEIKO SANCHIN</td><td class="td">Positie sanchin met rechte voeten.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">KATA ASHI DACHI</td><td class="td">Positie op één been — hangende voet (met bal).</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">SAGI ASHI DACHI</td><td class="td">Positie op één been — opgetrokken voet (met bal).</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">BENSOKU DACHI</td><td class="td">Gekruiste stand — achterste been op bal van de voet.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">RENOJI DACHI</td><td class="td">Positie voeten volgens het teken 'RE'. Neko ashi positionering met voeten plat op grond.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">SONKYO</td><td class="td">Gehurkte sumo positie — gebruikt in kata Kururunfa.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">MOTO DACHI</td><td class="td">Korte natuurlijke vechtstand — iets korter dan zenkutsu.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">KOSA DACHI</td><td class="td">Gekruiste stand — één voet voor de andere, op bal van achterste voet.</td></tr>
+  </tbody>
+</table>
+
+<!-- Kamae Waza -->
+<h3 class="section">Houding — Kamae Waza</h3>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Techniek</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">MIGI NO KAMAE</td><td class="td">Positie rechts voor.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">HIDARI NO KAMAE</td><td class="td">Positie links voor.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">SEIZA NO KAMAE</td><td class="td">Formele zithouding om te groeten. Hielen samen.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">TSUKI NO KAMAE</td><td class="td">Startpositie tsuki — links voor.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">MOROTE KAKE UKE NO KAMAE</td><td class="td">Startpositie dubbele afweer yoko uke — rechts voor.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SHIZEN TAI NO KAMAE</td><td class="td">Afwachtende positie in heiko dachi.</td></tr>
+  </tbody>
+</table>
+
+<!-- Uke Waza -->
+<h3 class="section">Afweertechnieken — Uke Waza</h3>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Techniek</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">AGE UKE</td><td class="td">Afweer hoog.</td></tr>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">YOKO UKE</td><td class="td">Afweer midden — binnen naar buiten.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">HARAI OTOSHI UKE</td><td class="td">Afweer laag.</td></tr>
+    <tr data-kyu="7"><td class="kc"><span class="kb k7">7</span></td><td class="tn">MOROTE KAKE UKE</td><td class="td">Dubbele afweer yoko uke.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">UCHI UKE</td><td class="td">Afweer midden — buiten naar binnen (Soto Uke / Ude Uke).</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">KAKE UKE</td><td class="td">Afweer midden — open ronddraaiende hand.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">KOKEN UKE</td><td class="td">Afweer met bovenkant pols.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">HAITO UKE</td><td class="td">Afweer met Haito (open hand, duimkant).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">MAWASHI UKE</td><td class="td">Ronddraaiende afweer (beide handen).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">TEISHO UKE CHUDAN</td><td class="td">Afweer met handpalm midden (idem shotei uke).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">TEISHO UKE YODAN</td><td class="td">Afweer met handpalm hoog (idem shotei uke).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">TEISHO UKE GEDAN</td><td class="td">Afweer met handpalm laag (idem shotei uke).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">OSAE UKE</td><td class="td">Afweer met onderkant pols.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">URA UKE</td><td class="td">Afweer met handrug — binnen naar buiten.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SUKUI UKE</td><td class="td">Schepafweer (één of beide handen).</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SASAI YOKE UKE</td><td class="td">Versterkte afweer midden — binnen naar buiten.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">JOGE UKE</td><td class="td">Combinatie afweer yoko uke — harai otoshi uke.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">SAMURAI UKE</td><td class="td">Combinatie afweer age uke — harai otoshi uke.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">JUJI UKE</td><td class="td">Gekruiste afweer.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">HAISHU UKE</td><td class="td">Afweer met handrug.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">NAGASHI UKE</td><td class="td">Begeleidende afweer met binnenkant open hand.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">CHO UKE</td><td class="td">Vlinder afweer.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">HARI UKE</td><td class="td">Boogschutterswering.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">OTOSHI UKE</td><td class="td">Neerdalende afweer met onderarm.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">SASAI AGE UKE</td><td class="td">Versterkte afweer boven.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">KURI UKE</td><td class="td">Draaiende, neerwaartse afweer met elleboog.</td></tr>
+  </tbody>
+</table>
+
+<!-- Te Waza -->
+<h3 class="section">Handtechnieken — Te Waza / Uchi Waza</h3>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Techniek</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">SEIKEN TSUKI CHUDAN</td><td class="td">Rechte vuiststoot midden.</td></tr>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">SEIKEN TSUKI YODAN</td><td class="td">Rechte vuiststoot hoog (gezicht).</td></tr>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">SEIKEN TSUKI GEDAN</td><td class="td">Rechte vuiststoot laag.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">URAKEN SHOMEN UCHI</td><td class="td">Zweepvuist — voorwaarts.</td></tr>
+    <tr data-kyu="7"><td class="kc"><span class="kb k7">7</span></td><td class="tn">URAKEN SAYO UCHI</td><td class="td">Zweepvuist — zijwaarts.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">SHUTO UCHI</td><td class="td">Slag met handzwaard (zijkant open hand).</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">GYAKU TSUKI</td><td class="td">Stoot met tegengestelde hand (waar voet achter staat).</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">SAN REN TSUKI</td><td class="td">Combinatie stoot hoog — midden — midden.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">AGE TSUKI</td><td class="td">Opwaartse stoot.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">KIZAMI TSUKI</td><td class="td">Korte stoot met voorste hand (jab).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">TETTSUI UCHI</td><td class="td">Hamerslag — onderkant gesloten vuist.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">FURI UCHI</td><td class="td">Zwaaislag.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">MAE HIJI ATE</td><td class="td">Elleboogslag voorwaarts.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">MAWASHI HIJI ATE</td><td class="td">Ronddraaiende elleboogslag.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">OTOSHI HIJI ATE</td><td class="td">Neerwaartse elleboogslag.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">YOKO HIJI ATE</td><td class="td">Zijwaartse elleboogslag.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">USHIRO HIJI ATE</td><td class="td">Achterwaartse elleboogslag.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">NUKITE TSUKI</td><td class="td">Speerhandstoot met vingertoppen.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">KAGI TSUKI</td><td class="td">Gehoekte stoot zijwaarts.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SHITA TSUKI</td><td class="td">Gehoekte stoot voorwaarts.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">YAMA TSUKI</td><td class="td">Dubbele stoot met gespiegelde vuisten (boven elkaar).</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">MAWASHI TSUKI</td><td class="td">Ronddraaiende stoot.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SHUTO GANMEN UCHI</td><td class="td">Open handzwaard slag naar de slaap.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SHUTO HIZO UCHI</td><td class="td">Open handzwaard slag naar de zwevende ribben.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">SHUTO SAKOTSU UCHI</td><td class="td">Handzwaardslag op sleutelbeen — neerwaarts.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">SHUTO SAKOTSU UCHI KOMI</td><td class="td">Handzwaardslag op sleutelbeen — frontaal.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">IPPON NUKITE</td><td class="td">Speerhand met één vinger (wijsvinger).</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">NIHON NUKITE</td><td class="td">Speerhand met twee vingers (wijs- en middelvinger).</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">KOKO</td><td class="td">Tijgermondhand — aanval met holte tussen duim en wijsvinger.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">SHIKYO</td><td class="td">Greep naar strottenhoofd met duim en wijsvinger.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">IPPON KEN</td><td class="td">Precieze stoot met eerste knokkel van wijsvinger (Hito Sashiyubi Ippon Ken).</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">NAKADAKA IPPON KEN</td><td class="td">Stoot met uitstekende middelvinger knokkel.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">KAIKO KEN</td><td class="td">Slag met gebogen pols / handgewricht.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">HIRA KEN</td><td class="td">Vlakke vuist — slag met eerste kootjes van de vingers.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">HAISHU ATE</td><td class="td">Slag met handrug.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">OYAYUBI IPPON KEN</td><td class="td">Stoot met duimknokkel.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">DANSHI UCHI</td><td class="td">Neerwaartse zweepslag met vingers (kata Seipai).</td></tr>
+  </tbody>
+</table>
+
+<!-- Geri Waza -->
+<h3 class="section">Voettechnieken — Geri Waza</h3>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Techniek</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="9"><td class="kc"><span class="kb k9">9</span></td><td class="tn">KOGAN GERI</td><td class="td">Lage trap naar kruis.</td></tr>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">MAE GERI</td><td class="td">Voorwaartse trap met bal van voet.</td></tr>
+    <tr data-kyu="7"><td class="kc"><span class="kb k7">7</span></td><td class="tn">SOKUTO GERI — KEAGE</td><td class="td">Zijwaartse trap met zijkant voet.</td></tr>
+    <tr data-kyu="7"><td class="kc"><span class="kb k7">7</span></td><td class="tn">MAWASHI GERI</td><td class="td">Ronddraaiende trap.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">MAWASHI KUBI GERI</td><td class="td">Ronddraaiende trap met bovenkant voet (hoog).</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">KANSETSU GERI</td><td class="td">Trap op gewricht (meestal knie).</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">USHIRO GERI</td><td class="td">Achterwaartse trap met hiel.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">MIKAZUKI GERI</td><td class="td">Halve maan trap — binnenwaarts.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">SOKUTO GERI — KEKOMI</td><td class="td">Zijwaartse trap met hiel (yoko geri).</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">MAE KAKATO GERI</td><td class="td">Voorwaartse hieltrap.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">USHIRO GERI MET OVERSTAP</td><td class="td">Achterwaartse trap met overstap.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">HIZA GERI</td><td class="td">Knietrap.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">DE ASHI BARAI</td><td class="td">Voetveeg.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">URA MAWASHI GERI</td><td class="td">Achterwaarts ronddraaiende trap, onderkant voet of hiel.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">USHIRO MAWASHI GERI</td><td class="td">Achterwaartse circulaire trap.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">GYAKU MAWASHI GERI</td><td class="td">Ronddraaiende trap binnen naar buiten.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">FUMIKOMI</td><td class="td">Neerwaarts stampende trap.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">SURIKONDE MAE GERI</td><td class="td">Mae geri met vooruitspringen (achterste been verjaagt het voorste).</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">DE ASHI BARAI — USHIRO GERI</td><td class="td">Combinatie voetveeg gevolgd door ushiro geri.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">MAE GERI — SOKUTO GERI</td><td class="td">Combinatie voorwaarts / zijwaarts, zelfde been.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">MAE GERI — MAWASHI GERI</td><td class="td">Combinatie voorwaarts / ronddraaiend, ander been.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">MIKAZUKI GERI — SOKUTO GERI</td><td class="td">Combinatie wegtrappen / zijwaarts, zelfde been.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">MAE GERI — MAWASHI GERI</td><td class="td">Combinatie voorwaarts / ronddraaiend, zelfde been.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">MAWASHI GERI — SOKUTO GERI</td><td class="td">Combinatie ronddraaiend / zijwaarts, zelfde been.</td></tr>
+  </tbody>
+</table>
+
+<!-- Ashi Sabaki -->
+<h3 class="section">Verplaatsingen — Ashi Sabaki</h3>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Techniek</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">MAWATE</td><td class="td">Draaien — veranderen van richting.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">AYUMI ASHI</td><td class="td">Vordering normale stap.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">YORI ASHI</td><td class="td">Vordering voorste been — achterste been volgt.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">TSUGI ASHI</td><td class="td">Vordering door bijtrekken achterste been, dan voorste been.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">YOZE ASHI</td><td class="td">Verplaatsing zijwaarts, voorste been eerst.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">HIKI ASHI</td><td class="td">Wijken voorste been, gevolgd door stap.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">TAI SABAKI</td><td class="td">Verandering van richting door verschuiven van een voet.</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════════════
+     KATA
+     ═══════════════════════════════════════════════════ -->
+<h2 class="chapter pb">KATA</h2>
+<table class="tt">
+  <thead><tr><th>Kyu</th><th>Kata</th><th>Omschrijving</th></tr></thead>
+  <tbody>
+    <tr data-kyu="8"><td class="kc"><span class="kb k8">8</span></td><td class="tn">PRINCIPE KATA</td><td class="td">Basisprincipes — fundamentele bewegingen.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">TAIKYOKU CHUDAN</td><td class="td">Basis kata — tsuki op chudan niveau.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">TAIKYOKU YODAN</td><td class="td">Basis kata — tsuki op yodan niveau.</td></tr>
+    <tr data-kyu="6"><td class="kc"><span class="kb k6">6</span></td><td class="tn">TAIKYOKU KAKE UKE</td><td class="td">Basis kata met kake uke afweer.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">GEKISAI DAI ICHI</td><td class="td">Aanvallende kata 1 — introductie kata Goju-Ryu.</td></tr>
+    <tr data-kyu="5"><td class="kc"><span class="kb k5">5</span></td><td class="tn">GEKISAI DAI NI</td><td class="td">Aanvallende kata 2 — uitbreiding met open hand en neko ashi.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">SANCHIN</td><td class="td">"Drie strijden" — ademhalings- en spanningskata, fundament.</td></tr>
+    <tr data-kyu="4"><td class="kc"><span class="kb k4">4</span></td><td class="tn">TENSHO</td><td class="td">"Roterende handen" — zachte ademhalingskata, tegenhanger van Sanchin.</td></tr>
+    <tr data-kyu="3"><td class="kc"><span class="kb k3">3</span></td><td class="tn">SAIFA</td><td class="td">"Verbreken / verscheuren" — snelle ontsnappingen.</td></tr>
+    <tr data-kyu="2"><td class="kc"><span class="kb k2">2</span></td><td class="tn">SEIYUNCHIN</td><td class="td">"Controle in stand" — kata in shiko dachi, geen trappen.</td></tr>
+    <tr data-kyu="1"><td class="kc"><span class="kb k1">1</span></td><td class="tn">SHISOCHIN</td><td class="td">"Vier richtingen" — aanvallen in 4 windrichtingen.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">SEIPAI</td><td class="td">"18 handen" — circulaire technieken.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">SANSEIRU</td><td class="td">"36 handen" — aanvallen op lage doelen.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">KURURUNFA</td><td class="td">"Stilstaan en plots toeslaan" — ritmewisselingen.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">SEISAN</td><td class="td">"13 handen" — één van de oudste Goju-Ryu kata.</td></tr>
+    <tr data-kyu="0"><td class="kc"><span class="kb kd">—</span></td><td class="tn">SUPARINPEI</td><td class="td">"108 handen" — hoogste / meest complexe Goju-Ryu kata.</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════════════
+     WOORDENLIJST
+     ═══════════════════════════════════════════════════ -->
+<h2 class="chapter pb">Aanvullende Woordenlijst</h2>
+<div class="vocab-grid">
+  <div class="vi"><span class="vt">HAJIME</span><span class="vd">Commando om te starten / beginnen</span></div>
+  <div class="vi"><span class="vt">YAME</span><span class="vd">Commando om te stoppen</span></div>
+  <div class="vi"><span class="vt">HIDARI</span><span class="vd">Links</span></div>
+  <div class="vi"><span class="vt">MIGI</span><span class="vd">Rechts</span></div>
+  <div class="vi"><span class="vt">KIME</span><span class="vd">Inzet / focus op het moment van de techniek</span></div>
+  <div class="vi"><span class="vt">ZANSHIN</span><span class="vd">Blijvende alertheid / bewustzijn na de techniek</span></div>
+  <div class="vi"><span class="vt">CHUDAN</span><span class="vd">Middelste zone (borst / buik)</span></div>
+  <div class="vi"><span class="vt">JODAN / YODAN</span><span class="vd">Hoge zone (hoofd / nek)</span></div>
+  <div class="vi"><span class="vt">GEDAN</span><span class="vd">Lage zone (buik en lager)</span></div>
+  <div class="vi"><span class="vt">MAAI</span><span class="vd">Gevechtafstand</span></div>
+  <div class="vi"><span class="vt">MA</span><span class="vd">Ruimte / timing</span></div>
+  <div class="vi"><span class="vt">BUNKAI</span><span class="vd">Toepassingen / interpretaties van kata</span></div>
+  <div class="vi"><span class="vt">KATA</span><span class="vd">Vooraf vastgelegde individuele vorm</span></div>
+  <div class="vi"><span class="vt">KUMITE</span><span class="vd">Sparring</span></div>
+  <div class="vi"><span class="vt">DOJO</span><span class="vd">Trainingshal</span></div>
+  <div class="vi"><span class="vt">OSU</span><span class="vd">Begroeting / bevestiging / respect</span></div>
+  <div class="vi"><span class="vt">REI</span><span class="vd">Buigen / groeten</span></div>
+  <div class="vi"><span class="vt">SENSEI</span><span class="vd">Leraar / instructeur</span></div>
+  <div class="vi"><span class="vt">SENPAI</span><span class="vd">Senior student</span></div>
+  <div class="vi"><span class="vt">HIKITE</span><span class="vd">Terugtrekkende hand bij stoot / trek</span></div>
+</div>
+
+</div><!-- /body -->
+
+<footer>
+  Fujiyama Hove &nbsp;·&nbsp; Goju-Ryu Karate &nbsp;·&nbsp; VKA &nbsp;·&nbsp; versie 05.2026
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+function filterKyu(val) {
+  var rows = document.querySelectorAll('tr[data-kyu]');
+  var info = document.getElementById('filter-info');
+  var n = parseInt(val, 10);
+
+  if (!n) {
+    rows.forEach(function(r) { r.classList.remove('hidden'); });
+    info.textContent = '';
+    return;
+  }
+
+  rows.forEach(function(r) {
+    var kyu = parseInt(r.dataset.kyu, 10);
+    // kyu 0 = dan/geen kyu → verbergen bij filter
+    // toon technieken van 9 t/m n (kyu >= n)
+    if (kyu === 0 || kyu < n) {
+      r.classList.add('hidden');
+    } else {
+      r.classList.remove('hidden');
+    }
+  });
+
+  var visible = document.querySelectorAll('tr[data-kyu]:not(.hidden)').length;
+  info.textContent = visible + ' technieken';
+}
+</script>
+</body>
+</html>

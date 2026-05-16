@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "mcp__9040ecee-a0af-44a1-ab93-296ffc1993bc__list_teams",
-      "mcp__9040ecee-a0af-44a1-ab93-296ffc1993bc__list_projects"
+      "mcp__9040ecee-a0af-44a1-ab93-296ffc1993bc__list_projects",
+      "Bash(mkdir -p /c/Users/anket/.claude/commands)",
+      "Bash(pip install *)",
+      "Bash(python3 -c ' *)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\anket\\.claude"
     ]
   }
 }

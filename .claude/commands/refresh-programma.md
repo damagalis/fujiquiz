@@ -1,9 +1,14 @@
 ---
-description: Ververs quiz (index.html) en programma (programma.html) op basis van de Obsidian PKM Gradenprogramma
+description: Ververs quiz (quiz.html) en programma (programma.html) op basis van de Obsidian PKM Gradenprogramma
 argument-hint: optioneel 'check' om alleen verschillen te rapporteren zonder te schrijven
 ---
 
-Vernieuw de inhoud van `index.html` en `programma.html` op basis van de meest recente data uit de Obsidian PKM vault.
+Vernieuw de inhoud van `quiz.html` en `programma.html` op basis van de meest recente data uit de Obsidian PKM vault.
+
+**Projectstructuur:**
+- `index.html` — landingspagina met links naar de twee andere pagina's (niet aanpassen)
+- `quiz.html` — de interactieve quiz (bevat de `const techniques` array)
+- `programma.html` — het volledige examenprogramma als document
 
 <instructions>
 
@@ -16,7 +21,7 @@ Lees deze twee bestanden volledig:
 ## Stap 2 — Lees de doelbestanden
 
 Lees de huidige inhoud van:
-- `index.html` (bevat de `const techniques = [...]` array in de `<script>` sectie)
+- `quiz.html` (bevat de `const techniques = [...]` array in de `<script>` sectie)
 - `programma.html` (bevat `<tr data-kyu="...">` rijen per sectie)
 
 ## Stap 3 — Analyseer de verschillen
@@ -33,14 +38,14 @@ Als het argument `check` is meegegeven: rapporteer alleen de verschillen en stop
 
 ## Stap 4 — Pas de bestanden aan
 
-### index.html — `const techniques = [...]`
+### quiz.html — `const techniques = [...]`
 
 De array heeft objecten met deze structuur:
 ```js
 { naam: "NAAM", cat: "Categorie", kyu: 5, omschrijving: "Nederlandse omschrijving" }
 ```
 
-Categorieënamen die in index.html gebruikt worden (gebruik exact deze schrijfwijze):
+Categorieënamen die in quiz.html gebruikt worden (gebruik exact deze schrijfwijze):
 - `"Dachi Waza"` → sectie *Dachi Waza* in Obsidian
 - `"Kamae Waza"` → sectie *Kamae Waza*
 - `"Uke Waza"` → sectie *Uke Waza*

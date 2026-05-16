@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Gradenprogramma Quiz — Fuji Yama Hove Goju-Ryu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #ede4d0;
+    --bg-soft: #f5efe3;
+    --card: #fbf7ee;
+    --text: #3a2e22;
+    --muted: #7a6b58;
+    --primary: #8b2c2c;
+    --primary-hover: #6f2222;
+    --primary-soft: #f4e6e3;
+    --accent: #c19a3e;
+    --correct: #4a6b3a;
+    --correct-bg: #e7eddc;
+    --wrong: #8b2c2c;
+    --wrong-bg: #f4e6e3;
+    --border: #d9cdb4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Georgia", "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(139,44,44,0.05) 0, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(193,154,62,0.07) 0, transparent 45%);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 20px;
+  }
+  .container { width: 100%; max-width: 760px; }
+
+  .dojo-header {
+    text-align: center;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--primary);
+    position: relative;
+  }
+  .dojo-header::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--primary);
+    margin: 6px auto 0;
+  }
+  .dojo-header .kanji {
+    font-size: 34px;
+    color: var(--primary);
+    letter-spacing: 8px;
+    line-height: 1;
+    margin-bottom: 8px;
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "MS Mincho", serif;
+  }
+  .dojo-header .dojo-name {
+    font-size: 22px;
+    color: var(--primary);
+    letter-spacing: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .dojo-header .dojo-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px 40px;
+    box-shadow: 0 4px 24px rgba(58,46,34,0.10);
+    position: relative;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px solid rgba(139,44,44,0.14);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .card > * { position: relative; z-index: 1; }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 1px;
+  }
+  h1::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: var(--primary);
+    margin-top: 10px;
+    margin-bottom: 6px;
+  }
+  h2 {
+    margin: 28px 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  p.intro {
+    color: var(--muted);
+    margin: 0 0 24px;
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  .form-row { margin-bottom: 22px; }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  select, input[type=number] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 15px;
+    background: #fff;
+    color: var(--text);
+    font-family: inherit;
+  }
+  select:focus, input[type=number]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139,44,44,0.10);
+  }
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .checkbox-grid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    background: #fff;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .checkbox-grid label:hover { background: var(--primary-soft); border-color: var(--primary); }
+  .checkbox-grid input { margin: 0; accent-color: var(--primary); }
+
+  button.primary {
+    background: var(--primary);
+    color: #fbf7ee;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.18s;
+    box-shadow: 0 2px 6px rgba(139,44,44,0.20);
+  }
+  button.primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(139,44,44,0.25); }
+  button.primary:disabled { background: #b9a98c; cursor: not-allowed; box-shadow: none; transform: none; }
+
+  .progress {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s;
+  }
+  .meta { color: var(--muted); font-size: 12px; margin-bottom: 8px; letter-spacing: 1.5px; text-transform: uppercase; font-style: italic; }
+  .question {
+    font-size: 23px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--primary);
+    line-height: 1.4;
+    padding: 14px 16px;
+    background: rgba(139,44,44,0.05);
+    border-left: 4px solid var(--primary);
+    border-radius: 2px;
+  }
+  .question-context {
+    color: var(--text);
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 600;
+    margin-bottom: 24px;
+    padding: 10px 16px;
+    background: rgba(193,154,62,0.10);
+    border-left: 4px solid var(--accent);
+    border-radius: 2px;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .option {
+    text-align: left;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    padding: 14px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .option:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+  }
+  .option:disabled { cursor: default; opacity: 0.75; }
+  .option.correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+    color: var(--correct);
+    font-weight: 600;
+  }
+  .option.wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+    color: var(--wrong);
+    font-weight: 600;
+  }
+  .feedback {
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+    border-left: 3px solid;
+  }
+  .feedback.correct { background: var(--correct-bg); color: var(--correct); border-left-color: var(--correct); }
+  .feedback.wrong { background: var(--wrong-bg); color: var(--wrong); border-left-color: var(--wrong); }
+  .actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+  .results-score { text-align: center; margin: 24px 0; }
+  .results-score .pct {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+    font-family: "Georgia", serif;
+  }
+  .results-score .frac {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .results-breakdown {
+    margin: 24px 0;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .breakdown-row .label-text { color: var(--muted); }
+
+  .dojo-footer {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-style: italic;
+  }
+  .dojo-footer .ornament {
+    color: var(--primary);
+    font-size: 14px;
+    margin: 0 10px;
+    opacity: 0.7;
+  }
+
+  .belt-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    gap: 8px;
+  }
+  .belt-card { position: relative; display: flex; }
+  .belt-card input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .belt-card label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 8px 9px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    background: #fff;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    text-align: center;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+  .belt-card label:hover { background: var(--primary-soft); border-color: var(--primary); }
+  .belt-card input:checked + label {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+    box-shadow: 0 0 0 2px rgba(139,44,44,0.18);
+    font-weight: 600;
+  }
+  .belt-visual {
+    width: 76px;
+    height: 20px;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+  .belt-kyu { font-size: 12px; font-weight: 700; color: var(--primary); }
+  .belt-color { font-size: 10px; color: var(--muted); line-height: 1.2; }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    body { padding: 16px 10px; }
+    .card { padding: 24px 22px; }
+    .dojo-header .dojo-name { font-size: 18px; letter-spacing: 4px; }
+    .dojo-header .kanji { font-size: 28px; letter-spacing: 6px; }
+    h1 { font-size: 24px; }
+  }
+</style>
+
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="dojo-header">
+    <div class="kanji">富士山</div>
+    <div class="dojo-name">Fuji Yama Hove</div>
+    <div class="dojo-sub">Goju-Ryu Karate Dojo</div>
+  </div>
+  <div class="card">
+
+    <!-- INTRO SCREEN -->
+    <div id="intro-screen">
+      <h1>Gradenprogramma Quiz</h1>
+      <p class="intro">Test je kennis van het Goju-Ryu gradenprogramma. Verschillende vraagtypes door elkaar — eindscore op het einde.</p>
+
+      <div class="form-row">
+        <label for="num-questions">Aantal vragen</label>
+        <select id="num-questions">
+          <option value="10">10 vragen</option>
+          <option value="20" selected>20 vragen</option>
+          <option value="30">30 vragen</option>
+          <option value="50">50 vragen</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label>Categorieën</label>
+        <div class="checkbox-grid" id="category-checkboxes"></div>
+      </div>
+
+      <div class="form-row">
+        <label>Gordel</label>
+        <div class="belt-selector" id="belt-selector"></div>
+      </div>
+
+      <div class="form-row">
+        <label>Vraagtypes</label>
+        <div class="checkbox-grid" id="qtype-checkboxes">
+          <label><input type="checkbox" value="naam_to_omschrijving" checked> Naam → omschrijving</label>
+          <label><input type="checkbox" value="omschrijving_to_naam" checked> Omschrijving → naam</label>
+          <label><input type="checkbox" value="categorie" checked> Welke categorie?</label>
+        </div>
+      </div>
+
+      <button class="primary" id="start-btn">Start quiz</button>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden">
+      <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+      <div class="meta" id="question-meta"></div>
+      <div class="question" id="question-text"></div>
+      <div class="question-context" id="question-context"></div>
+      <div class="options" id="options"></div>
+      <div id="feedback"></div>
+      <div class="actions">
+        <span class="meta" id="score-meta"></span>
+        <button class="primary hidden" id="next-btn">Volgende →</button>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="results-screen" class="hidden">
+      <h1>Eindscore</h1>
+      <div class="results-score">
+        <div class="pct" id="result-pct"></div>
+        <div class="frac" id="result-frac"></div>
+      </div>
+      <div id="result-message" class="intro" style="text-align: center;"></div>
+      <div class="results-breakdown">
+        <h2>Per vraagtype</h2>
+        <div id="breakdown"></div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="primary" id="retry-btn">Nieuwe quiz</button>
+        <button class="primary" id="review-btn" style="background: #777;">Bekijk fouten</button>
+      </div>
+      <div id="review-area" class="hidden" style="margin-top: 24px;"></div>
+    </div>
+
+  </div>
+
+  <div class="dojo-footer">
+    <span class="ornament">❖</span>Fuji Yama Hove<span class="ornament">❖</span>Goju-Ryu Karate<span class="ornament">❖</span>
+  </div>
+</div>
+
+<script>
+// =============================================================
+// GEGEVENS UIT GRADENPROGRAMMA
+// =============================================================
+const techniques = [
+  // Dachi Waza
+  { naam: "HEIKO DACHI", cat: "Dachi Waza", kyu: 9, omschrijving: "Stand voeten evenwijdig (Fudo Dachi)" },
+  { naam: "ZENKUTSU DACHI", cat: "Dachi Waza", kyu: 9, omschrijving: "Voorwaarts leunende stand – voorste been gebogen, achterste been gestrekt" },
+  { naam: "MUSUBI DACHI", cat: "Dachi Waza", kyu: 8, omschrijving: "Formele groetstand – hielen samen" },
+  { naam: "SANCHIN DACHI", cat: "Dachi Waza", kyu: 8, omschrijving: "Basis stand op schouderbreedte – voeten wijzen naar binnen" },
+  { naam: "HEISOKU DACHI", cat: "Dachi Waza", kyu: 6, omschrijving: "Stand met voeten samen" },
+  { naam: "SHIKO DACHI", cat: "Dachi Waza", kyu: 6, omschrijving: "Wijde stand met voeten buitenwaarts – knieën boven hielen" },
+  { naam: "NEKO ASHI DACHI", cat: "Dachi Waza", kyu: 6, omschrijving: "Katstand" },
+  { naam: "SOTO HACHI MONJI DACHI", cat: "Dachi Waza", kyu: 5, omschrijving: "Vanuit heiko dachi voeten buitenwaarts (Joi dachi)" },
+  { naam: "UCHI HACHI MONJI DACHI", cat: "Dachi Waza", kyu: 5, omschrijving: "Vanuit shiko dachi voeten binnenwaarts" },
+  { naam: "HAN ZENKUTSU DACHI", cat: "Dachi Waza", kyu: 5, omschrijving: "Korte voorwaarts leunende stand" },
+  { naam: "KOKUTSU DACHI", cat: "Dachi Waza", kyu: 4, omschrijving: "Achterwaarts leunende stand" },
+  { naam: "HEIKO SANCHIN", cat: "Dachi Waza", kyu: 3, omschrijving: "Sanchin positie met rechte voeten" },
+  { naam: "KATA ASHI DACHI", cat: "Dachi Waza", kyu: 1, omschrijving: "Positie op 1 been – hangende voet" },
+  { naam: "SAGI ASHI DACHI", cat: "Dachi Waza", kyu: 1, omschrijving: "Positie op 1 been – opgetrokken voet" },
+  { naam: "BENSOKU DACHI", cat: "Dachi Waza", kyu: 1, omschrijving: "Gekruiste stand – achterste been op bal van voet" },
+  { naam: "RENOJI DACHI", cat: "Dachi Waza", kyu: null, omschrijving: "Voeten volgens het teken 'RE' – neko ashi positie maar voeten plat" },
+  { naam: "SONKYO", cat: "Dachi Waza", kyu: null, omschrijving: "Gehurkte sumo positie – gebruikt in kata kururunfa" },
+  { naam: "MOTO DACHI", cat: "Dachi Waza", kyu: null, omschrijving: "Korte natuurlijke vechtstand – iets korter dan zenkutsu" },
+  { naam: "KOSA DACHI", cat: "Dachi Waza", kyu: null, omschrijving: "Gekruiste stand – één voet voor de andere op bal van achterste voet" },
+
+  // Kamae Waza
+  { naam: "MIGI NO KAMAE", cat: "Kamae Waza", kyu: 8, omschrijving: "Positie rechts voor" },
+  { naam: "HIDARI NO KAMAE", cat: "Kamae Waza", kyu: 8, omschrijving: "Positie links voor" },
+  { naam: "SEIZA NO KAMAE", cat: "Kamae Waza", kyu: 8, omschrijving: "Formele knielende positie – hielen samen" },
+  { naam: "TSUKI NO KAMAE", cat: "Kamae Waza", kyu: 5, omschrijving: "Startpositie tsuki – links voor" },
+  { naam: "MOROTE KAKE UKE NO KAMAE", cat: "Kamae Waza", kyu: 5, omschrijving: "Startpositie dubbele afweer yoko uke – rechts voor" },
+  { naam: "SHIZEN TAI NO KAMAE", cat: "Kamae Waza", kyu: null, omschrijving: "Afwachtende positie in heiko dachi" },
+
+  // Uke Waza
+  { naam: "AGE UKE", cat: "Uke Waza", kyu: 9, omschrijving: "Afweer hoog" },
+  { naam: "YOKO UKE", cat: "Uke Waza", kyu: 9, omschrijving: "Afweer midden – binnen naar buiten" },
+  { naam: "HARAI OTOSHI UKE", cat: "Uke Waza", kyu: 8, omschrijving: "Afweer laag" },
+  { naam: "MOROTE KAKE UKE", cat: "Uke Waza", kyu: 7, omschrijving: "Dubbele afweer yoko uke" },
+  { naam: "UCHI UKE", cat: "Uke Waza", kyu: 6, omschrijving: "Afweer midden – buiten naar binnen" },
+  { naam: "KAKE UKE", cat: "Uke Waza", kyu: 6, omschrijving: "Afweer midden – open ronddraaiende hand" },
+  { naam: "KOKEN UKE", cat: "Uke Waza", kyu: 6, omschrijving: "Afweer met bovenkant pols" },
+  { naam: "HAITO UKE", cat: "Uke Waza", kyu: 6, omschrijving: "Afweer met haito (open hand, duimkant)" },
+  { naam: "MAWASHI UKE", cat: "Uke Waza", kyu: 5, omschrijving: "Ronddraaiende afweer met beide handen" },
+  { naam: "TEISHO UKE CHUDAN", cat: "Uke Waza", kyu: 5, omschrijving: "Afweer met handpalm – midden" },
+  { naam: "TEISHO UKE YUDAN", cat: "Uke Waza", kyu: 5, omschrijving: "Afweer met handpalm – hoog" },
+  { naam: "TEISHO UKE GEDAN", cat: "Uke Waza", kyu: 5, omschrijving: "Afweer met handpalm – laag" },
+  { naam: "OSAE UKE", cat: "Uke Waza", kyu: 5, omschrijving: "Afweer met onderkant pols" },
+  { naam: "URA UKE", cat: "Uke Waza", kyu: 4, omschrijving: "Afweer met handrug – binnen naar buiten" },
+  { naam: "SUKUI UKE", cat: "Uke Waza", kyu: 4, omschrijving: "Schep afweer (1 of beide handen)" },
+  { naam: "SASAI YOKE UKE", cat: "Uke Waza", kyu: 4, omschrijving: "Versterkte afweer midden – binnen naar buiten" },
+  { naam: "JOGE UKE", cat: "Uke Waza", kyu: 4, omschrijving: "Combinatie afweer yoko uke + harai otoshi uke" },
+  { naam: "SAMURAI UKE", cat: "Uke Waza", kyu: 3, omschrijving: "Combinatie afweer age uke + harai otoshi uke" },
+  { naam: "JUJI UKE", cat: "Uke Waza", kyu: 3, omschrijving: "Gekruiste afweer" },
+  { naam: "HAISHU UKE", cat: "Uke Waza", kyu: 3, omschrijving: "Afweer met handrug" },
+  { naam: "NAGASHI UKE", cat: "Uke Waza", kyu: 3, omschrijving: "Begeleidende afweer met binnenkant open hand" },
+  { naam: "CHO UKE", cat: "Uke Waza", kyu: 2, omschrijving: "Vlinder afweer" },
+  { naam: "HARI UKE", cat: "Uke Waza", kyu: 2, omschrijving: "Boogschuttersafweer" },
+  { naam: "OTOSHI UKE", cat: "Uke Waza", kyu: 2, omschrijving: "Neerdalende afweer met onderarm" },
+  { naam: "SASAI AGE UKE", cat: "Uke Waza", kyu: 1, omschrijving: "Versterkte afweer boven" },
+  { naam: "KURI UKE", cat: "Uke Waza", kyu: 1, omschrijving: "Draaiende, neerwaartse afweer met elleboog" },
+
+  // Te Waza
+  { naam: "SEIKEN TSUKI CHUDAN", cat: "Te Waza", kyu: 9, omschrijving: "Vuiststoot midden" },
+  { naam: "SEIKEN TSUKI YODAN", cat: "Te Waza", kyu: 9, omschrijving: "Vuiststoot hoog (gezicht)" },
+  { naam: "SEIKEN TSUKI GEDAN", cat: "Te Waza", kyu: 9, omschrijving: "Vuiststoot laag" },
+  { naam: "URAKEN SHOMEN UCHI", cat: "Te Waza", kyu: 8, omschrijving: "Zweepvuist – voorwaarts" },
+  { naam: "URAKEN SAYO UCHI", cat: "Te Waza", kyu: 7, omschrijving: "Zweepvuist – zijwaarts" },
+  { naam: "SHUTO UCHI", cat: "Te Waza", kyu: 6, omschrijving: "Slag met handzwaard (zijkant open hand)" },
+  { naam: "GYAKU TSUKI", cat: "Te Waza", kyu: 6, omschrijving: "Stoot met tegengestelde hand (waar voet achter staat)" },
+  { naam: "SAN REN TSUKI", cat: "Te Waza", kyu: 6, omschrijving: "Combinatie stoot hoog – midden – midden" },
+  { naam: "AGE TSUKI", cat: "Te Waza", kyu: 6, omschrijving: "Opwaartse stoot" },
+  { naam: "KIZAMI TSUKI", cat: "Te Waza", kyu: 6, omschrijving: "Korte stoot met voorste hand (jab)" },
+  { naam: "TETTSUI UCHI", cat: "Te Waza", kyu: 5, omschrijving: "Hamerslag – onderkant gesloten vuist" },
+  { naam: "FURI UCHI", cat: "Te Waza", kyu: 5, omschrijving: "ronddraaiende slag met zweepvuist (uraken)" },
+    { naam: "GOHON NUKITE", cat: "Te Waza", kyu: 5, omschrijving: "Vingersteek" },
+  { naam: "MAE HIJI ATE", cat: "Te Waza", kyu: 5, omschrijving: "Elleboogslag voorwaarts" },
+  { naam: "MAWASHI HIJI ATE", cat: "Te Waza", kyu: 5, omschrijving: "Ronddraaiende elleboogslag" },
+  { naam: "OTOSHI HIJI ATE", cat: "Te Waza", kyu: 5, omschrijving: "Neerwaartse elleboogslag" },
+  { naam: "YOKO HIJI ATE", cat: "Te Waza", kyu: 5, omschrijving: "Zijwaartse elleboogslag" },
+  { naam: "USHIRO HIJI ATE", cat: "Te Waza", kyu: 5, omschrijving: "Achterwaartse elleboogslag" },
+  { naam: "NUKITE TSUKI", cat: "Te Waza", kyu: 4, omschrijving: "Speerhandstoot met vingertoppen" },
+  { naam: "KAGI TSUKI", cat: "Te Waza", kyu: 4, omschrijving: "Gehoekte stoot zijwaarts" },
+  { naam: "SHITA TSUKI", cat: "Te Waza", kyu: 4, omschrijving: "Gehoekte stoot voorwaarts" },
+  { naam: "YAMA TSUKI", cat: "Te Waza", kyu: 4, omschrijving: "Dubbele stoot met gespiegelde vuisten (boven elkaar)" },
+  { naam: "MAWASHI TSUKI", cat: "Te Waza", kyu: 4, omschrijving: "Ronddraaiende stoot" },
+  { naam: "SHUTO GANMEN UCHI", cat: "Te Waza", kyu: 4, omschrijving: "Open handzwaard slag naar de slaap" },
+  { naam: "SHUTO HIZO UCHI", cat: "Te Waza", kyu: 4, omschrijving: "Open hand slag naar midden" },
+  { naam: "SHUTO SAKOTSU UCHI", cat: "Te Waza", kyu: 3, omschrijving: "Handzwaardslag op sleutelbeen – neerwaarts" },
+  { naam: "SHUTO SAKOTSU UCHI KOMI", cat: "Te Waza", kyu: 3, omschrijving: "Handzwaardslag op sleutelbeen – frontaal" },
+  { naam: "IPPON NUKITE", cat: "Te Waza", kyu: 3, omschrijving: "Speerhand met één vinger (wijsvinger)" },
+    { naam: "NIHON NUKITE", cat: "Te Waza", kyu: 3, omschrijving: "Speerhand met twee vingers (wijs- en middelvinger)" },
+  { naam: "KOKO", cat: "Te Waza", kyu: 3, omschrijving: "Tijgermondhand – aanval met holte tussen duim en wijsvinger" },
+  { naam: "IPPON KEN", cat: "Te Waza", kyu: 3, omschrijving: "Precieze stoot met eerste knokkel van wijsvinger" },
+  { naam: "NAKADAKA IPPON KEN", cat: "Te Waza", kyu: 2, omschrijving: "Stoot met uitstekende middelvinger knokkel" },
+  { naam: "KAIKO KEN", cat: "Te Waza", kyu: 2, omschrijving: "Slag met gebogen pols / handgewricht" },
+  { naam: "HIRA KEN", cat: "Te Waza", kyu: 1, omschrijving: "Vlakke vuist – slag met eerste kootjes van vingers" },
+  { naam: "HAISHU ATE", cat: "Te Waza", kyu: 1, omschrijving: "Slag met handrug" },
+  { naam: "OYAYUBI IPPON KEN", cat: "Te Waza", kyu: 1, omschrijving: "Stoot met duimknokkel" },
+
+  // Geri Waza
+  { naam: "KOGAN GERI", cat: "Geri Waza", kyu: 9, omschrijving: "Lage trap naar kruis" },
+  { naam: "MAE GERI", cat: "Geri Waza", kyu: 8, omschrijving: "Voorwaartse trap met bal van voet" },
+  { naam: "SOKUTO GERI KEAGE", cat: "Geri Waza", kyu: 7, omschrijving: "Zijwaartse trap met zijkant voet" },
+  { naam: "MAWASHI GERI", cat: "Geri Waza", kyu: 7, omschrijving: "Ronddraaiende trap" },
+  { naam: "MAWASHI KUBI GERI", cat: "Geri Waza", kyu: 6, omschrijving: "Ronddraaiende trap met bovenkant voet (hoog)" },
+  { naam: "KANSETSU GERI", cat: "Geri Waza", kyu: 6, omschrijving: "Trap op gewricht (meestal knie)" },
+  { naam: "USHIRO GERI", cat: "Geri Waza", kyu: 6, omschrijving: "Achterwaartse trap met hiel" },
+  { naam: "MIKAZUKI GERI", cat: "Geri Waza", kyu: 5, omschrijving: "Halve maan trap – binnenwaarts" },
+  { naam: "SOKUTO GERI KEKOMI", cat: "Geri Waza", kyu: 5, omschrijving: "Zijwaartse trap met hiel (yoko geri)" },
+  { naam: "MAE KAKATO GERI", cat: "Geri Waza", kyu: 4, omschrijving: "Voorwaartse hieltrap" },
+  { naam: "HIZA GERI", cat: "Geri Waza", kyu: 4, omschrijving: "Knietrap" },
+  { naam: "DE ASHI BARAI", cat: "Geri Waza", kyu: 4, omschrijving: "Voetveeg" },
+  { naam: "URA MAWASHI GERI", cat: "Geri Waza", kyu: 3, omschrijving: "Achterwaarts ronddraaiende trap, onderkant voet of hiel" },
+  { naam: "USHIRO MAWASHI GERI", cat: "Geri Waza", kyu: 3, omschrijving: "Achterwaartse ronddraaiende trap (haak)" },
+  { naam: "GYAKU MAWASHI GERI", cat: "Geri Waza", kyu: 3, omschrijving: "Ronddraaiende trap binnen naar buiten" },
+  { naam: "FUMIKOMI", cat: "Geri Waza", kyu: 2, omschrijving: "Neerwaarts stampende trap" },
+  { naam: "SURIKONDE MAE GERI", cat: "Geri Waza", kyu: 2, omschrijving: "Mae geri met vooruitspringen (achterste been verjaagt het voorste)" },
+
+  // Ashi Sabaki
+  { naam: "MAWATE", cat: "Ashi Sabaki", kyu: 5, omschrijving: "Draaien – veranderen van richting" },
+  { naam: "AYUMI ASHI", cat: "Ashi Sabaki", kyu: 3, omschrijving: "Vordering met normale stap" },
+  { naam: "YORI ASHI", cat: "Ashi Sabaki", kyu: 3, omschrijving: "Vordering voorste been – achterste been volgt" },
+  { naam: "TSUGI ASHI", cat: "Ashi Sabaki", kyu: 3, omschrijving: "Vordering door bijtrekken achterste been, dan voorste been" },
+  { naam: "YOZE ASHI", cat: "Ashi Sabaki", kyu: 3, omschrijving: "Verplaatsing zijwaarts – voorste been eerst" },
+  { naam: "HIKI ASHI", cat: "Ashi Sabaki", kyu: 3, omschrijving: "Wijken voorste been, gevolgd door stap" },
+  { naam: "TAI SABAKI", cat: "Ashi Sabaki", kyu: 3, omschrijving: "Verandering van richting door verschuiven van een voet" },
+
+  // Kata
+  { naam: "TAIKYOKU CHUDAN", cat: "Kata", kyu: 5, omschrijving: "Basis kata – tsuki op chudan niveau" },
+  { naam: "TAIKYOKU YODAN", cat: "Kata", kyu: 5, omschrijving: "Basis kata – tsuki op yodan niveau" },
+  { naam: "TAIKYOKU KAKE UKE", cat: "Kata", kyu: 5, omschrijving: "Basis kata met kake uke afweer" },
+  { naam: "GEKISAI DAI ICHI", cat: "Kata", kyu: 5, omschrijving: "Aanvallende kata 1 – introductie kata Goju-Ryu" },
+  { naam: "GEKISAI DAI NI", cat: "Kata", kyu: 5, omschrijving: "Aanvallende kata 2 – uitbreiding met open hand en neko ashi" },
+  { naam: "SANCHIN", cat: "Kata", kyu: 4, omschrijving: "'Drie strijden' – ademhalings- en spanningskata, fundament" },
+  { naam: "TENSHO", cat: "Kata", kyu: 4, omschrijving: "'Roterende handen' – zachte ademhalingskata, tegenhanger sanchin" },
+  { naam: "SAIFA", cat: "Kata", kyu: 3, omschrijving: "'Verbreken / verscheuren' – snelle ontsnappingen" },
+  { naam: "SEIYUNCHIN", cat: "Kata", kyu: 2, omschrijving: "'Controle in stand' – kata in shiko dachi, heel beheersd en traag uitegevoerd met tempo wissels,  geen trappen" },
+  { naam: "SHISOCHIN", cat: "Kata", kyu: 1, omschrijving: "'Vier richtingen' – aanvallen in 4 windrichtingen" },
+  { naam: "SEIPAI", cat: "Kata", kyu: null, omschrijving: "'18 handen' – Veel gebruik van cirkelvormige technieken" },
+  { naam: "SANSEIRU", cat: "Kata", kyu: null, omschrijving: "'36 handen' – kata met veel aanvallen op lage doelen" },
+  { naam: "KURURUNFA", cat: "Kata", kyu: null, omschrijving: "'Stilstaan en plots toeslaan' – hoog niveau kata met ritmewisselingen en complexe toepassingen (zoals ontsnapping dubbele nelson)" },
+  { naam: "SEISAN", cat: "Kata", kyu: null, omschrijving: "'13 handen' – één van de oudste Goju-Ryu kata" },
+  { naam: "SUPARINPEI", cat: "Kata", kyu: null, omschrijving: "'108 handen' – hoogste / meest complexe Goju-Ryu kata" },
+];
+
+const categories = [...new Set(techniques.map(t => t.cat))];
+
+const belts = [
+  { value: "all", label: "Alle banden",          color: "",                      base: null,      stripes: [] },
+  { value: 9,     label: "9e Kyu",               color: "Wit / zwarte streep",   base: "#e8e8e8", stripes: ["#222"] },
+  { value: 8,     label: "8e Kyu",               color: "Geel",                  base: "#f0c020", stripes: [] },
+  { value: 7,     label: "7e Kyu",               color: "Geel / zwarte streep",  base: "#f0c020", stripes: ["#222"] },
+  { value: 6,     label: "6e Kyu",               color: "Oranje",                base: "#e87020", stripes: [] },
+  { value: 5,     label: "5e Kyu",               color: "Groen",                 base: "#3a8c45", stripes: [] },
+  { value: 4,     label: "4e Kyu",               color: "Blauw",                 base: "#2255a4", stripes: [] },
+  { value: 3,     label: "3e Kyu",               color: "Bruin / 1 streep",      base: "#6b3a20", stripes: ["#fff"] },
+  { value: 2,     label: "2e Kyu",               color: "Bruin / 2 strepen",     base: "#6b3a20", stripes: ["#fff","#fff"] },
+  { value: 1,     label: "1e Kyu",               color: "Bruin / 3 strepen",     base: "#6b3a20", stripes: ["#fff","#fff","#fff"] },
+];
+
+function createBeltVisual(belt) {
+  const el = document.createElement("div");
+  el.className = "belt-visual";
+  if (!belt.base) {
+    el.style.background = "linear-gradient(to right,#e8e8e8 10%,#f0c020 22%,#e87020 38%,#3a8c45 52%,#2255a4 66%,#6b3a20 100%)";
+    return el;
+  }
+  el.style.backgroundColor = belt.base;
+  belt.stripes.forEach((color, i) => {
+    const s = document.createElement("div");
+    s.style.cssText = `position:absolute;top:0;bottom:0;width:5px;background:${color};right:${(belt.stripes.length - i) * 9 + 4}px;`;
+    el.appendChild(s);
+  });
+  return el;
+}
+
+const qtypeLabels = {
+  naam_to_omschrijving: "Naam → omschrijving",
+  omschrijving_to_naam: "Omschrijving → naam",
+  categorie: "Welke categorie?"
+};
+
+// =============================================================
+// HELPERS
+// =============================================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pickRandom(arr, n) { return shuffle(arr).slice(0, n); }
+function pickOne(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// =============================================================
+// VRAGEN GENEREREN
+// =============================================================
+function generateQuestion(qtype, pool) {
+  const target = pickOne(pool);
+
+  if (qtype === "naam_to_omschrijving") {
+    const distractors = pickRandom(
+      techniques.filter(t => t.cat === target.cat && t.naam !== target.naam),
+      3
+    );
+    if (distractors.length < 3) return null;
+    const options = shuffle([target, ...distractors]).map(t => t.omschrijving);
+    return {
+      qtype, target,
+      question: `Wat is de juiste omschrijving van "${target.naam}"?`,
+      context: `Categorie: ${target.cat}`,
+      options,
+      correct: target.omschrijving
+    };
+  }
+
+  if (qtype === "omschrijving_to_naam") {
+    const distractors = pickRandom(
+      techniques.filter(t => t.cat === target.cat && t.naam !== target.naam),
+      3
+    );
+    if (distractors.length < 3) return null;
+    const options = shuffle([target, ...distractors]).map(t => t.naam);
+    return {
+      qtype, target,
+      question: `Welke techniek hoort bij deze omschrijving?`,
+      context: `"${target.omschrijving}" — categorie ${target.cat}`,
+      options,
+      correct: target.naam
+    };
+  }
+
+  if (qtype === "categorie") {
+    const otherCats = categories.filter(c => c !== target.cat);
+    const distractors = pickRandom(otherCats, 3);
+    if (distractors.length < 3) return null;
+    const options = shuffle([target.cat, ...distractors]);
+    return {
+      qtype, target,
+      question: `Tot welke categorie behoort "${target.naam}"?`,
+      context: target.omschrijving,
+      options,
+      correct: target.cat
+    };
+  }
+
+  if (qtype === "kyu") {
+    if (target.kyu === null) return null;
+    const allKyus = [...new Set(techniques.filter(t => t.kyu !== null).map(t => t.kyu))];
+    const otherKyus = allKyus.filter(k => k !== target.kyu);
+    const distractors = pickRandom(otherKyus, 3);
+    if (distractors.length < 3) return null;
+    const options = shuffle([target.kyu, ...distractors]).map(k => `${k} Kyu`);
+    return {
+      qtype, target,
+      question: `Op welk Kyu niveau wordt "${target.naam}" getoetst?`,
+      context: target.omschrijving,
+      options,
+      correct: `${target.kyu} Kyu`
+    };
+  }
+}
+
+// =============================================================
+// QUIZ STATE
+// =============================================================
+let state = null;
+
+function startQuiz() {
+  const numQuestions = parseInt(document.getElementById("num-questions").value);
+  const selectedCats = [...document.querySelectorAll("#category-checkboxes input:checked")].map(c => c.value);
+  const selectedQtypes = [...document.querySelectorAll("#qtype-checkboxes input:checked")].map(c => c.value);
+
+  if (selectedCats.length === 0) { alert("Kies minstens één categorie."); return; }
+  if (selectedQtypes.length === 0) { alert("Kies minstens één vraagtype."); return; }
+
+  const selectedBelt = document.querySelector("#belt-selector input:checked")?.value ?? "all";
+  let allowedKyus = null;
+  if (selectedBelt !== "all") {
+    const target = parseInt(selectedBelt);
+    allowedKyus = Array.from({ length: 9 - target + 1 }, (_, i) => 9 - i);
+  }
+
+  const pool = techniques.filter(t =>
+    selectedCats.includes(t.cat) &&
+    (allowedKyus === null || t.kyu === null || allowedKyus.includes(t.kyu))
+  );
+  if (pool.length < 4) { alert("Te weinig technieken in selectie. Kies meer categorieën of kyu niveaus."); return; }
+
+  // Generate questions
+  const questions = [];
+  let attempts = 0;
+  while (questions.length < numQuestions && attempts < numQuestions * 10) {
+    const qtype = pickOne(selectedQtypes);
+    let qtypePool = pool;
+    if (qtype === "kyu") qtypePool = pool.filter(t => t.kyu !== null);
+    if (qtypePool.length < 4) { attempts++; continue; }
+    const q = generateQuestion(qtype, qtypePool);
+    if (q) questions.push(q);
+    attempts++;
+  }
+
+  if (questions.length === 0) { alert("Kon geen vragen genereren – kies meer categorieën / vraagtypes."); return; }
+
+  state = {
+    questions,
+    current: 0,
+    answers: [],
+    score: 0
+  };
+
+  document.getElementById("intro-screen").classList.add("hidden");
+  document.getElementById("results-screen").classList.add("hidden");
+  document.getElementById("quiz-screen").classList.remove("hidden");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.questions[state.current];
+  const total = state.questions.length;
+
+  document.getElementById("progress-bar").style.width = `${(state.current / total) * 100}%`;
+  document.getElementById("question-meta").textContent = `Vraag ${state.current + 1} van ${total} • ${qtypeLabels[q.qtype]}`;
+  document.getElementById("question-text").textContent = q.question;
+  document.getElementById("question-context").textContent = q.context || "";
+  document.getElementById("score-meta").textContent = `Score: ${state.score} / ${state.current}`;
+  document.getElementById("feedback").innerHTML = "";
+  document.getElementById("next-btn").classList.add("hidden");
+
+  const optionsEl = document.getElementById("options");
+  optionsEl.innerHTML = "";
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = opt;
+    btn.onclick = () => answerQuestion(opt, btn);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function answerQuestion(chosen, btnEl) {
+  const q = state.questions[state.current];
+  const correct = chosen === q.correct;
+  state.answers.push({ q, chosen, correct });
+  if (correct) state.score++;
+
+  // Disable all buttons and mark them
+  document.querySelectorAll("#options .option").forEach(b => {
+    b.disabled = true;
+    if (b.textContent === q.correct) b.classList.add("correct");
+    if (b === btnEl && !correct) b.classList.add("wrong");
+  });
+
+  // Feedback
+  const fb = document.getElementById("feedback");
+  if (correct) {
+    fb.innerHTML = `<div class="feedback correct">✓ Juist!</div>`;
+  } else {
+    fb.innerHTML = `<div class="feedback wrong">✗ Fout. Het juiste antwoord was: <strong>${q.correct}</strong></div>`;
+  }
+
+  document.getElementById("score-meta").textContent = `Score: ${state.score} / ${state.current + 1}`;
+  document.getElementById("next-btn").classList.remove("hidden");
+}
+
+function nextQuestion() {
+  state.current++;
+  if (state.current >= state.questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById("quiz-screen").classList.add("hidden");
+  document.getElementById("results-screen").classList.remove("hidden");
+  document.getElementById("review-area").classList.add("hidden");
+  document.getElementById("review-area").innerHTML = "";
+
+  const total = state.questions.length;
+  const pct = Math.round((state.score / total) * 100);
+  document.getElementById("result-pct").textContent = `${pct}%`;
+  document.getElementById("result-frac").textContent = `${state.score} van ${total} juist`;
+
+  let msg = "";
+  if (pct === 100) msg = "Perfect! Je kent het programma uit het hoofd.";
+  else if (pct >= 85) msg = "Uitstekend werk!";
+  else if (pct >= 70) msg = "Goed bezig — nog een paar details om in te slijpen.";
+  else if (pct >= 50) msg = "Op de goede weg. Bekijk je fouten om bij te schaven.";
+  else msg = "Nog wat herhaling nodig. Bekijk je fouten en probeer opnieuw.";
+  document.getElementById("result-message").textContent = msg;
+
+  // Breakdown per qtype
+  const breakdown = {};
+  state.answers.forEach(a => {
+    if (!breakdown[a.q.qtype]) breakdown[a.q.qtype] = { correct: 0, total: 0 };
+    breakdown[a.q.qtype].total++;
+    if (a.correct) breakdown[a.q.qtype].correct++;
+  });
+  const bdEl = document.getElementById("breakdown");
+  bdEl.innerHTML = "";
+  Object.entries(breakdown).forEach(([qtype, data]) => {
+    const row = document.createElement("div");
+    row.className = "breakdown-row";
+    row.innerHTML = `<span class="label-text">${qtypeLabels[qtype]}</span><span><strong>${data.correct}</strong> / ${data.total}</span>`;
+    bdEl.appendChild(row);
+  });
+}
+
+function showReview() {
+  const wrong = state.answers.filter(a => !a.correct);
+  const area = document.getElementById("review-area");
+  if (wrong.length === 0) {
+    area.innerHTML = `<div class="feedback correct">Geen fouten om te bekijken — alles juist!</div>`;
+  } else {
+    area.innerHTML = `<h2>Foute antwoorden (${wrong.length})</h2>` + wrong.map(a => `
+      <div style="border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 10px;">
+        <div style="font-weight: 500; margin-bottom: 4px;">${a.q.question}</div>
+        ${a.q.context ? `<div style="color: var(--muted); font-size: 13px; margin-bottom: 8px;">${a.q.context}</div>` : ''}
+        <div style="font-size: 14px;"><span style="color: var(--wrong);">Jouw antwoord:</span> ${a.chosen}</div>
+        <div style="font-size: 14px;"><span style="color: var(--correct);">Correct:</span> <strong>${a.q.correct}</strong></div>
+      </div>
+    `).join("");
+  }
+  area.classList.remove("hidden");
+}
+
+// =============================================================
+// INIT
+// =============================================================
+function init() {
+  const catEl = document.getElementById("category-checkboxes");
+  categories.forEach(cat => {
+    const lbl = document.createElement("label");
+    lbl.innerHTML = `<input type="checkbox" value="${cat}" checked> ${cat}`;
+    catEl.appendChild(lbl);
+  });
+
+  const beltEl = document.getElementById("belt-selector");
+  belts.forEach((belt, idx) => {
+    const card = document.createElement("div");
+    card.className = "belt-card";
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "belt-level";
+    input.id = `belt-${belt.value}`;
+    input.value = belt.value;
+    if (idx === 0) input.checked = true;
+    const lbl = document.createElement("label");
+    lbl.setAttribute("for", `belt-${belt.value}`);
+    lbl.appendChild(createBeltVisual(belt));
+    const kyuDiv = document.createElement("div");
+    kyuDiv.className = "belt-kyu";
+    kyuDiv.textContent = belt.label;
+    lbl.appendChild(kyuDiv);
+    if (belt.color) {
+      const colorDiv = document.createElement("div");
+      colorDiv.className = "belt-color";
+      colorDiv.textContent = belt.color;
+      lbl.appendChild(colorDiv);
+    }
+    card.appendChild(input);
+    card.appendChild(lbl);
+    beltEl.appendChild(card);
+  });
+
+  document.getElementById("start-btn").onclick = startQuiz;
+  document.getElementById("next-btn").onclick = nextQuestion;
+  document.getElementById("retry-btn").onclick = () => {
+    document.getElementById("results-screen").classList.add("hidden");
+    document.getElementById("intro-screen").classList.remove("hidden");
+  };
+  document.getElementById("review-btn").onclick = showReview;
+}
+init();
+</script>
+</body>
+</html>

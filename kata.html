@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kata Gids — Fujiyama Hove</title>
+<style>
+:root {
+  --bg: #ede4d0;
+  --bg-soft: #f5efe3;
+  --card: #fbf7ee;
+  --text: #3a2e22;
+  --muted: #7a6b58;
+  --primary: #8b2c2c;
+  --primary-hover: #6f2222;
+  --primary-soft: #f4e6e3;
+  --accent: #c19a3e;
+  --accent-soft: rgba(193,154,62,0.12);
+  --border: #d9cdb4;
+  --correct: #4a6b3a;
+  --correct-bg: #e7eddc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(139,44,44,0.05) 0, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(193,154,62,0.07) 0, transparent 45%);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 24px 16px 48px;
+}
+.container { width: 100%; max-width: 720px; margin: 0 auto; }
+
+/* ── Dojo header ── */
+.dojo-header {
+  text-align: center;
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--primary);
+  position: relative;
+}
+.dojo-header::after {
+  content: "";
+  display: block;
+  width: 60px; height: 2px;
+  background: var(--primary);
+  margin: 7px auto 0;
+}
+.kanji { font-size: 32px; color: var(--primary); letter-spacing: 8px; line-height: 1; margin-bottom: 6px; font-family: "Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif; }
+.dojo-name { font-size: 20px; color: var(--primary); letter-spacing: 5px; font-weight: 700; text-transform: uppercase; }
+.dojo-sub { font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; font-style: italic; }
+
+/* ── Card ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 28px 32px;
+  box-shadow: 0 4px 24px rgba(58,46,34,.10);
+  position: relative;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 9px; left: 9px; right: 9px; bottom: 9px;
+  border: 1px solid rgba(139,44,44,.13);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.card > * { position: relative; z-index: 1; }
+
+/* ── Buttons ── */
+button.primary {
+  background: var(--primary);
+  color: #fbf7ee;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .18s;
+  box-shadow: 0 2px 6px rgba(139,44,44,.18);
+}
+button.primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+button.primary:disabled { background: #b9a98c; cursor: not-allowed; transform: none; box-shadow: none; }
+button.ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--border);
+  padding: 9px 18px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+}
+button.ghost:hover { border-color: var(--primary); background: var(--primary-soft); }
+button.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  transition: background .15s;
+  color: var(--primary);
+}
+button.icon-btn:hover { background: var(--primary-soft); }
+
+/* ── Screen visibility ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ══════════════════════════════════════
+   OVERVIEW SCREEN
+   ══════════════════════════════════════ */
+.screen-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  letter-spacing: .5px;
+}
+.screen-title::after {
+  content: "";
+  display: block;
+  width: 44px; height: 3px;
+  background: var(--primary);
+  margin-top: 8px; margin-bottom: 4px;
+}
+.screen-sub { color: var(--muted); font-style: italic; font-size: 14px; margin-bottom: 22px; }
+
+.level-group { margin-bottom: 22px; }
+.level-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.kata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.kata-card {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all .16s;
+  text-align: left;
+}
+.kata-card:hover { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139,44,44,.12); }
+.kata-card.no-data { opacity: .65; cursor: default; }
+.kata-card.no-data:hover { transform: none; box-shadow: none; border-color: var(--border); background: #fff; }
+.kata-card-name { font-size: 13.5px; font-weight: 700; color: var(--primary); letter-spacing: .3px; margin-bottom: 3px; }
+.kata-card-betekenis { font-size: 11.5px; color: var(--muted); font-style: italic; margin-bottom: 6px; line-height: 1.4; }
+.kata-card-meta { display: flex; align-items: center; gap: 6px; }
+.kyu-pill {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.badge-steps { font-size: 10px; color: var(--muted); }
+.badge-coming { font-size: 10px; color: #bbb; font-style: italic; }
+
+/* ══════════════════════════════════════
+   KATA DETAIL — top bar
+   ══════════════════════════════════════ */
+.detail-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.back-btn {
+  font-size: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-weight: 700;
+  transition: background .15s;
+  letter-spacing: 0;
+}
+.back-btn:hover { background: var(--primary-soft); }
+.detail-kata-name { font-size: 18px; font-weight: 700; color: var(--primary); letter-spacing: .5px; flex: 1; }
+.detail-kata-level { font-size: 11px; color: var(--muted); font-style: italic; }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 9px 18px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color .15s, border-color .15s;
+}
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-btn:hover:not(.active) { color: var(--text); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ══════════════════════════════════════
+   SAMENVATTING TAB
+   ══════════════════════════════════════ */
+.kata-info-block {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.kata-info-block strong { color: var(--primary); }
+
+.step-list { list-style: none; }
+.step-list-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  align-items: flex-start;
+  transition: background .12s;
+}
+.step-list-item:hover { background: var(--primary-soft); }
+.step-list-item:last-child { border-bottom: none; }
+.step-nr {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  min-width: 28px;
+  padding-top: 2px;
+  text-align: right;
+}
+.step-kiai .step-nr { color: var(--primary); }
+.step-list-tech { font-weight: 600; color: var(--text); }
+.step-list-cue { font-size: 11.5px; color: var(--muted); font-style: italic; }
+.kiai-badge { display: inline-block; background: var(--primary); color: #fff; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 8px; vertical-align: middle; margin-left: 6px; letter-spacing: .5px; }
+
+/* ══════════════════════════════════════
+   STAP VOOR STAP TAB
+   ══════════════════════════════════════ */
+.step-controls-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+.step-counter { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.autospeak-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+.autospeak-toggle input { accent-color: var(--primary); cursor: pointer; }
+
+.step-progress {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.step-progress-bar { height: 100%; background: var(--primary); transition: width .3s; }
+
+/* Direction indicator */
+.dir-block {
+  text-align: center;
+  margin-bottom: 14px;
+  padding: 12px 16px 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.dir-arrow {
+  display: block;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--primary);
+}
+.dir-richting {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Main cue */
+.step-cue {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.3;
+  padding: 16px 18px;
+  background: rgba(139,44,44,.05);
+  border-left: 4px solid var(--primary);
+  border-radius: 2px;
+  margin-bottom: 14px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+.step-cue.kiai-step { border-left-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+.kiai-label {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* Technique + stance */
+.step-tech-block {
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+.step-tech-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 3px; }
+.step-tech-value { font-weight: 600; color: var(--text); }
+
+/* Focus & fout */
+.step-hints { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.hint-box { padding: 8px 12px; border-radius: 3px; font-size: 12px; line-height: 1.5; }
+.hint-focus { background: var(--correct-bg); border-left: 3px solid var(--correct); color: #2e4a22; }
+.hint-fout  { background: var(--primary-soft); border-left: 3px solid var(--primary); color: var(--primary); }
+.hint-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 2px; opacity: .7; }
+
+/* Step nav */
+.step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+}
+.speak-btn { font-size: 22px; }
+.step-nav-arrows { display: flex; gap: 8px; }
+
+/* No-data state */
+.no-data-msg {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Footer */
+.dojo-footer {
+  text-align: center;
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-style: italic;
+}
+.dojo-footer .ornament { color: var(--primary); font-size: 14px; margin: 0 10px; opacity: .7; }
+
+/* ── Belt pill colors ── */
+.kyu-9 { background: #f0f0f0; color: #333; border: 1px solid #aaa; }
+.kyu-8 { background: #FFD700; color: #333; }
+.kyu-7 { background: #FFD700; color: #333; border: 1px solid #888; }
+.kyu-6 { background: #FF8C00; color: #fff; }
+.kyu-5 { background: #2e7d32; color: #fff; }
+.kyu-4 { background: #1565c0; color: #fff; }
+.kyu-3 { background: #6d3b1b; color: #fff; }
+.kyu-2 { background: #6d3b1b; color: #fff; }
+.kyu-1 { background: #6d3b1b; color: #fff; }
+.kyu-dan { background: #111; color: #fff; }
+
+/* ── Responsive ── */
+@media (max-width: 560px) {
+  body { padding: 16px 10px 36px; }
+  .card { padding: 20px 18px; }
+  .step-cue { font-size: 21px; }
+  .step-hints { grid-template-columns: 1fr; }
+  .kata-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 380px) {
+  .kata-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="dojo-header">
+    <div class="kanji">富士山</div>
+    <div class="dojo-name">Fuji Yama Hove</div>
+    <div class="dojo-sub">Goju-Ryu Karate Dojo</div>
+  </div>
+
+  <div class="card">
+
+    <!-- ══ SCREEN 1: OVERZICHT ══ -->
+    <div id="screen-overview" class="screen active">
+      <h1 class="screen-title">Kata Gids</h1>
+      <p class="screen-sub">Kies een kata voor de samenvatting en de stap-voor-stap gids.</p>
+      <div id="kata-overview-list"></div>
+    </div>
+
+    <!-- ══ SCREEN 2: KATA DETAIL ══ -->
+    <div id="screen-detail" class="screen">
+      <div class="detail-topbar">
+        <button class="back-btn" onclick="showOverview()">← Terug</button>
+        <div>
+          <div class="detail-kata-name" id="detail-naam"></div>
+          <div class="detail-kata-level" id="detail-level"></div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('samenvatting', this)">Samenvatting</button>
+        <button class="tab-btn"        onclick="switchTab('stapvoorstap', this)">Stap voor stap</button>
+      </div>
+
+      <!-- SAMENVATTING -->
+      <div id="tab-samenvatting" class="tab-panel active">
+        <div class="kata-info-block" id="detail-info"></div>
+        <ul class="step-list" id="detail-step-list"></ul>
+        <div class="no-data-msg" id="detail-no-data" style="display:none">
+          Stappen voor deze kata zijn nog niet beschikbaar.<br>
+          Voeg ze toe via Obsidian en gebruik <strong>/refresh-programma</strong>.
+        </div>
+      </div>
+
+      <!-- STAP VOOR STAP -->
+      <div id="tab-stapvoorstap" class="tab-panel">
+        <div id="step-view-empty" class="no-data-msg" style="display:none">
+          Stappen voor deze kata zijn nog niet beschikbaar.<br>
+          Voeg ze toe via Obsidian en gebruik <strong>/refresh-programma</strong>.
+        </div>
+        <div id="step-view-content">
+          <div class="step-controls-top">
+            <span class="step-counter" id="step-counter"></span>
+            <label class="autospeak-toggle">
+              <input type="checkbox" id="autospeak-toggle"> Automatisch voorlezen
+            </label>
+          </div>
+          <div class="step-progress"><div class="step-progress-bar" id="step-progress-bar"></div></div>
+          <div id="kiai-label-el" class="kiai-label" style="display:none">KIAI!</div>
+          <div class="dir-block" id="dir-block"></div>
+          <div class="step-cue" id="step-cue"></div>
+          <div class="step-tech-block">
+            <div class="step-tech-label">Techniek</div>
+            <div class="step-tech-value" id="step-tech"></div>
+          </div>
+          <div class="step-tech-block" id="step-stand-block">
+            <div class="step-tech-label">Stand</div>
+            <div class="step-tech-value" id="step-stand"></div>
+          </div>
+          <div class="step-hints" id="step-hints">
+            <div class="hint-box hint-focus">
+              <div class="hint-label">Aandacht</div>
+              <div id="step-focus"></div>
+            </div>
+            <div class="hint-box hint-fout">
+              <div class="hint-label">Veelgemaakte fout</div>
+              <div id="step-fout"></div>
+            </div>
+          </div>
+          <div class="step-nav">
+            <button class="icon-btn speak-btn" id="speak-btn" title="Voorlezen" onclick="speakCurrent()">🔊</button>
+            <div class="step-nav-arrows">
+              <button class="ghost" id="prev-btn" onclick="changeStep(-1)">← Vorige</button>
+              <button class="primary" id="next-btn" onclick="changeStep(1)">Volgende →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+
+  <div class="dojo-footer">
+    <span class="ornament">❖</span>Fuji Yama Hove<span class="ornament">❖</span>Goju-Ryu Karate<span class="ornament">❖</span>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  KATA DATA
+//  Stappen volgen het formaat uit het Obsidian kata template.
+//  Gebruik /refresh-programma om data vanuit Obsidian bij te werken.
+// ═══════════════════════════════════════════════════════
+const KATA = [
+  // ── KYU KATA ───────────────────────────────────────
+  {
+    id: "taikyoku-chudan",
+    naam: "TAIKYOKU CHUDAN",
+    kyu: 6, niveau: "6e Kyu",
+    betekenis: "Basis kata — tsuki op chudan niveau",
+    beschrijving: "Eerste kata in het Goju-Ryu examenprogramma. Eenvoudige I-vorm met gedan barai en chudan tsuki.",
+    embusen: "I-vorm",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "taikyoku-yodan",
+    naam: "TAIKYOKU YODAN",
+    kyu: 6, niveau: "6e Kyu",
+    betekenis: "Basis kata — tsuki op yodan niveau",
+    beschrijving: "Variant van Taikyoku Chudan met stoten op yodan (hoog) niveau.",
+    embusen: "I-vorm",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "taikyoku-kake-uke",
+    naam: "TAIKYOKU KAKE UKE",
+    kyu: 6, niveau: "6e Kyu",
+    betekenis: "Basis kata met kake uke afweer",
+    beschrijving: "Taikyoku variant waarbij gedan barai vervangen wordt door kake uke.",
+    embusen: "I-vorm",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "gekisai-dai-ichi",
+    naam: "GEKISAI DAI ICHI",
+    kyu: 5, niveau: "5e Kyu",
+    betekenis: "Aanvallende kata 1 — introductie kata Goju-Ryu",
+    beschrijving: "Gecreëerd door Chojun Miyagi als introductie tot Goju-Ryu. 'Gekisai' betekent aanvallen en vernietigen. De kata loopt in een H-vorm en combineert basisblokken met directe aanvallen.",
+    embusen: "H-vorm",
+    kiai_bij: [10, 13],
+    stappen: [
+      { nr: 1,  tel: "1",  angleFrom: 0,   angleChange: -90,  richting: "Links",                 stand: "Hidari Sanchin Dachi", technieken: "Hidari Age Uke",                                                                                                          cue: "Vanuit Heiko Dachi, rechtse voet schuift naar voor, dan draai links met age uke in sanchin dachi", focus: "Draai vanuit rechtse voet en heup",                                      fout: "" },
+      { nr: 2,  tel: "2",  angleFrom: 270, angleChange: 0,    richting: "Vooruit",               stand: "Migi Sanchin Dachi",   technieken: "Migi Seiken Tsuki Yodan",                                                                                                 cue: "Stap vooruit korte stand, stoot hoog",                                                             focus: "",                                                                        fout: "" },
+      { nr: 3,  tel: "3",  angleFrom: 270, angleChange: 0,    richting: "Wijkend",               stand: "Hidari Shiko Dachi",   technieken: "Hidari Harai Otoshi Uke",                                                                                                 cue: "Wijken naar shiko dachi met lage afweer",                                                          focus: "",                                                                        fout: "" },
+      { nr: 4,  tel: "4",  angleFrom: 270, angleChange: 180,  richting: "Mawate (180° achter)",  stand: "Migi Sanchin Dachi",   technieken: "Hidari Age Uke",                                                                                                          cue: "Andere kant — rechtse voet blijft staan, linkse voet bijtrekken, afweer hoog",                     focus: "Samen vast en heuprotatie bij draai",                                     fout: "Linkse voet blijft achter. Geen volledige stap vanuit shiko dachi naar sanchin dachi." },
+      { nr: 5,  tel: "5",  angleFrom: 90,  angleChange: 0,    richting: "Vooruit",               stand: "Hidari Sanchin Dachi", technieken: "Hidari Seiken Tsuki Yodan",                                                                                               cue: "Stap vooruit korte stand, stoot hoog",                                                             focus: "",                                                                        fout: "" },
+      { nr: 6,  tel: "6",  angleFrom: 90,  angleChange: 0,    richting: "Wijkend (achteruit)",   stand: "Migi Shiko Dachi",     technieken: "Migi Harai Otoshi Uke",                                                                                                   cue: "Wijken naar shiko dachi met lage afweer met rechts",                                               focus: "",                                                                        fout: "" },
+      { nr: 7,  tel: "7",  angleFrom: 90,  angleChange: -90,  richting: "Kwart draai links (90°)", stand: "Hidari Sanchin Dachi", technieken: "Hidari Yoko Uke",                                                                                                       cue: "Linkse voet verplaatst naar voor — heel traag afweer midden",                                      focus: "Traag en beheerst uitvoeren",                                             fout: "" },
+      { nr: 8,  tel: "8",  angleFrom: 0,   angleChange: 0,    richting: "Vooruit",               stand: "Migi Sanchin Dachi",   technieken: "Migi Yoko Uke",                                                                                                           cue: "Stap vooruit — heel traag afweer midden",                                                          focus: "Traag en beheerst uitvoeren",                                             fout: "" },
+      { nr: 9,  tel: "9",  angleFrom: 0,   angleChange: 0,    richting: "Vooruit",               stand: "Hidari Zenkutsu Dachi",technieken: "Hidari Mae Geri, Hidari Mae Hiji Ate, Hidari Uraken Shomen Uchi, Hidari Harai Otoshi Uke, Migi Gyaku Tsuki Chudan",       cue: "Vorderen — trap voorwaarts, elleboogstoot samen vast met stand, uraken, afweer laag, stoot met links", focus: "Uitvoeren met snelheid, kracht en ritme",                               fout: "Individuele technieken niet volledig afwerken." },
+      { nr: 10, tel: "10", angleFrom: 0,   angleChange: 180,  richting: "Achteruit",             stand: "Heiko Dachi",          technieken: "Migi Ashi Barai, Migi Shuto Mawashi Uchi",                                                                                cue: "Vegen met achterste been en draaien met heup. Slag opzij met rechts. KIAI!",                        focus: "Bij de veeg voeten mooi parallel eindigen",                               fout: "Heiko Dachi niet te breed zetten." },
+      { nr: 11, tel: "11", angleFrom: 180, angleChange: 0,    richting: "Vooruit",               stand: "Hidari Sanchin Dachi", technieken: "Hidari Yoko Uke",                                                                                                         cue: "Linkse voet verplaatst naar voor — heel traag afweer midden",                                      focus: "Traag en beheerst uitvoeren",                                             fout: "" },
+      { nr: 12, tel: "12", angleFrom: 180, angleChange: 0,    richting: "Vooruit",               stand: "Migi Zenkutsu Dachi",  technieken: "Migi Mae Geri, Migi Mae Hiji Ate, Migi Uraken Shomen Uchi, Migi Harai Otoshi Uke, Hidari Gyaku Tsuki Chudan",            cue: "Vorderen — trap voorwaarts, elleboogstoot samen vast met stand, uraken, afweer laag, stoot met rechts", focus: "Uitvoeren met snelheid, kracht en ritme",                              fout: "Individuele technieken niet volledig afwerken." },
+      { nr: 13, tel: "13", angleFrom: 180, angleChange: -180, stap: "kort", richting: "Achteruit",             stand: "Heiko Dachi",          technieken: "Hidari Ashi Barai, Hidari Shuto Mawashi Uchi",                                                                            cue: "Vegen met achterste been en draaien met heup. Slag opzij met links. KIAI!",                         focus: "Bij de veeg voeten mooi parallel eindigen",                               fout: "Heiko Dachi niet te breed zetten." },
+      { nr: 14, tel: "14", angleFrom: 0,   angleChange: 0,    richting: "Achteruit",             stand: "Migi Zenkutsu Dachi",  technieken: "Hidari Hikite, Migi Yama Tsuki",                                                                                          cue: "Linkse voet stapt achteruit — linkervuist intrekken zonder omdraaien (handrug boven). Dan dubbele stoot.", focus: "Yama Tsuki: vuisten mooi boven elkaar, gelijke afstand van het lichaam.", fout: "" },
+      { nr: 15, tel: "15", angleFrom: 0,   angleChange: 0,    richting: "Ter plaatse",           stand: "Hidari Zenkutsu Dachi",technieken: "Yoko beweging, Hidari Yama Tsuki",                                                                                         cue: "Linkse voet stapt bij, lage stand houden, vuisten wisselen met afweerbeweging, rechtse voet achteruit en dubbele stoot.", focus: "Yama Tsuki: vuisten mooi boven elkaar, gelijke afstand van het lichaam.", fout: "Tussenbeweging niet vergeten." },
+      { nr: 16, tel: "16", angleFrom: 0,   angleChange: 0,    richting: "Vooruit",               stand: "Musubi Dachi",         technieken: "Shizentai no Kamae — afsluiting",                                                                                         cue: "Rechtse voet naar voor bijplaatsen, eindbeweging en groeten",                                      focus: "",                                                                        fout: "" },
+    ]
+  },
+  {
+    id: "gekisai-dai-ni",
+    naam: "GEKISAI DAI NI",
+    kyu: 5, niveau: "5e Kyu",
+    betekenis: "Aanvallende kata 2 — uitbreiding met open hand en neko ashi",
+    beschrijving: "Uitbreiding op Gekisai Dai Ichi. Introduceert open-hand technieken (kake uke, shuto uchi) en neko ashi dachi. De kata is rijker aan technieken en vraagt meer technische beheersing.",
+    embusen: "I-vorm",
+    kiai_bij: [8, 16],
+    stappen: []
+  },
+  {
+    id: "sanchin",
+    naam: "SANCHIN",
+    kyu: 4, niveau: "4e Kyu",
+    betekenis: "Drie strijden — fundament van Goju-Ryu",
+    beschrijving: "Basis kata voor Goju-Ryu. Omvat vele fundamentele principes die relevant zijn bij het trainen van basistechnieken. In sommige stijlen wordt de kata fysiek uitgetest door de sensei ('ijzeren vest' / shime).",
+    embusen: "I-vorm",
+    kiai_bij: [],
+    stappen: [
+      { nr: 1,  tel: "1",  angleFrom: 0,   angleChange: 0,    richting: "Voorwaarts",        stand: "Migi Sanchin Dachi",   technieken: "Morote Kake Uke no Kamae (rechts voor), Hikite links, Tsuki rechts vooruit, Yoko Uke links",                                    cue: "Dubbele afweer, links in, links uit, links yoko uke",                                                                                    focus: "Top tot teen spanningsopbouw in lichaam",     fout: "Spanning verliezen in rest van lichaam. Seiken pas draaien nadat elleboog voorbij lichaam komt." },
+      { nr: 2,  tel: "2",  angleFrom: 0,   angleChange: 0,    richting: "Voorwaarts",        stand: "Hidari Sanchin Dachi", technieken: "Morote Kake Uke (links voor), Hikite rechts, Tsuki links vooruit, Yoko Uke rechts",                                             cue: "Dubbele afweer, rechts in, rechts uit, rechts yoko afweer midden",                                                                       focus: "",                                            fout: "" },
+      { nr: 3,  tel: "3",  angleFrom: 0,   angleChange: 0,    richting: "Voorwaarts",        stand: "Migi Sanchin Dachi",   technieken: "Morote Kake Uke no Kamae (rechts voor), Hikite links, Tsuki rechts, links terug naar Hikite, aanzet Yoko Uke links",            cue: "Dubbele afweer, links in, links uit, links terug in, linkse vuist aanzet onder elleboog",                                                focus: "",                                            fout: "" },
+      { nr: 4,  tel: "4",  angleFrom: 0,   angleChange: -180, richting: "Mawate (180° linksom)", stand: "Hidari Sanchin Dachi", technieken: "Mawate naar Hidari Sanchin Dachi — Hidari Yoko Uke, Tsuki rechts vooruit, Yoko Uke rechts",                             cue: "Rechts voet aanzet voor draai, knie in knieholte. Snelle draai met afweer links, rechts uit, rechts in, rechts yoko uke.",               focus: "Bij draai lichaam rechtop houden. Bij mawate laag in stand gaan, 'kurketrekker' beweging bij draai.", fout: "Lichaam niet samen vastzetten na draai." },
+      { nr: 5,  tel: "5",  angleFrom: 180, angleChange: 0,    richting: "Voorwaarts",        stand: "Migi Sanchin Dachi",   technieken: "Morote Kake Uke no Kamae (rechts voor), Hikite links, Tsuki rechts, links terug naar Hikite, aanzet Yoko Uke links",            cue: "Dubbele afweer, links in, links uit, links terug in, aanzet yoko uke",                                                                   focus: "",                                            fout: "" },
+      { nr: 6,  tel: "6",  angleFrom: 180, angleChange: -180,  richting: "Mawate (180° linksom)", stand: "Hidari Sanchin Dachi", technieken: "Mawate naar Hidari Sanchin Dachi — Hidari Yoko Uke, Tsuki rechts vooruit, Yoko Uke rechts",                             cue: "Rechts voet aanzet voor draai, knie in knieholte. Snelle draai met afweer links, rechts uit, rechts afweer yoko midden",                focus: "Bij draai lichaam rechtop houden. Bij mawate laag in stand gaan, 'kurketrekker' beweging bij draai.", fout: "Lichaam niet samen vastzetten na draai." },
+      { nr: 7,  tel: "7",  angleFrom: 0,   angleChange: 0,    richting: "Voorwaarts",        stand: "Migi Sanchin Dachi",   technieken: "Morote Kake Uke no Kamae + Yoko Uke links–rechts–links, Dubbele Sukui Uke, Dubbele Nukite Tsuki gedan",                        cue: "Dubbele afweer, links in, links uit, links terug in, links yoko uke, rechts in, rechts uit, rechts yoko uke, links in, links uit, dubbele sukui uke, dubbele vingersteek gedan", focus: "", fout: "Sukui te hoog brengen." },
+      { nr: 8,  tel: "8",  angleFrom: 0,   angleChange: 0,    richting: "Geen verplaatsing", stand: "Migi Sanchin Dachi",   technieken: "Vanuit dubbele Nukite: vuisten maken, intrekken gordelhoogte, omhoog naar Hikite, Nukite gedan — 3 herhalingen",                  cue: "Vanuit vingersteek: in driehoek vuist maken en intrekken op gordelhoogte, vuist omhoog naar hikite, dan dubbele vingersteek. Nog 2 keer herhalen.", focus: "",                            fout: "" },
+      { nr: 9,  tel: "9",  angleFrom: 0,   angleChange: 0,    richting: "Achteruit wijkend", stand: "Hidari Sanchin Dachi", technieken: "Mawashi Uke (rechterhand boven)",                                                                                               cue: "Wijken, mawashi uke, hand rechts boven beginnen",                                                                                        focus: "",                                            fout: "" },
+      { nr: 10, tel: "10", angleFrom: 0,   angleChange: 0,    richting: "Achteruit wijkend", stand: "Migi Sanchin Dachi",   technieken: "Mawashi Uke (linkerhand boven)",                                                                                                cue: "Wijken, mawashi uke, hand links boven beginnen",                                                                                         focus: "",                                            fout: "" },
+      { nr: 11, tel: "11", angleFrom: 0,   angleChange: 0,    richting: "Bijtrekken",        stand: "Musubi Dachi",         technieken: "Shizentai no Kamae — afsluiting",                                                                                               cue: "Afsluiten",                                                                                                                              focus: "",                                            fout: "" },
+    ]
+  },
+  {
+    id: "tensho",
+    naam: "TENSHO",
+    kyu: 4, niveau: "4e Kyu",
+    betekenis: "Roterende handen — zachte ademhalingskata",
+    beschrijving: "De zachte tegenhanger van Sanchin. Tensho traint de vloeiende, cirkelvormige bewegingen van Goju-Ryu ('Go' = hard, 'Ju' = zacht). De handen roteren continu terwijl de ademhaling en het hara centraal staan.",
+    embusen: "Lineair",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "saifa",
+    naam: "SAIFA",
+    kyu: 3, niveau: "3e Kyu",
+    betekenis: "Verbreken / verscheuren — snelle ontsnappingen",
+    beschrijving: "Eerste van de geavanceerde Goju-Ryu kata. Saifa bevat snelle bewegingsomkeringen, elleboogtechnieken en ontsnappingstechnieken uit grepen. De nadruk ligt op explosieve kime gecombineerd met zachte afweer.",
+    embusen: "Variabel",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "seiyunchin",
+    naam: "SEIYUNCHIN",
+    kyu: 2, niveau: "2e Kyu",
+    betekenis: "Controle in stand — kata zonder trappen",
+    beschrijving: "Een unieke kata: de enige Goju-Ryu kata zonder trappen. Bijna volledig uitgevoerd in shiko dachi. Bevat krachtige trek- en stootkombinaties, meotode (gepaarde handen) en nauwkeurig heupgebruik.",
+    embusen: "Rechthoekig",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "shisochin",
+    naam: "SHISOCHIN",
+    kyu: 1, niveau: "1e Kyu",
+    betekenis: "Vier richtingen — aanvallen in 4 windrichtingen",
+    beschrijving: "Kata die technieken in vier richtingen combineert. Bevat open-hand aanvallen, nukite en complexe voetenpatronen. Vereist sterke beheersing van meerdere standen en richtingswisselingen.",
+    embusen: "Kruis (4 richtingen)",
+    kiai_bij: [],
+    stappen: []
+  },
+  // ── DAN KATA ───────────────────────────────────────
+  {
+    id: "seipai",
+    naam: "SEIPAI",
+    kyu: null, niveau: "Dan",
+    betekenis: "18 handen — circulaire technieken",
+    beschrijving: "Geavanceerde dan-kata met veel cirkelvormige bewegingen en complexe bunkai. Het getal 18 verwijst naar de boeddhistische waarde van de kata.",
+    embusen: "Variabel",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "sanseiru",
+    naam: "SANSEIRU",
+    kyu: null, niveau: "Dan",
+    betekenis: "36 handen — aanvallen op lage doelen",
+    beschrijving: "Bevat veel gedan-aanvallen en voegtechnieken. Sanseiru traint het aanvallen van lage doelen en het doorbreken van de weerstand van de tegenstander.",
+    embusen: "Variabel",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "kururunfa",
+    naam: "KURURUNFA",
+    kyu: null, niveau: "Dan",
+    betekenis: "Stilstaan en plots toeslaan — ritmewisselingen",
+    beschrijving: "Kata met kenmerkende ritmewisselingen: plotse explosieve bewegingen na stilstand. Bevat complexe toepassingen zoals ontsnapping uit dubbele nelson.",
+    embusen: "Variabel",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "seisan",
+    naam: "SEISAN",
+    kyu: null, niveau: "Dan",
+    betekenis: "13 handen — één van de oudste Goju-Ryu kata",
+    beschrijving: "Een van de oudste kata in het Goju-Ryu systeem. Seisan traint krachtige lineaire aanvallen gecombineerd met stabiele standen en trappen.",
+    embusen: "Variabel",
+    kiai_bij: [],
+    stappen: []
+  },
+  {
+    id: "suparinpei",
+    naam: "SUPARINPEI",
+    kyu: null, niveau: "Dan",
+    betekenis: "108 handen — hoogste en meest complexe Goju-Ryu kata",
+    beschrijving: "De meest complexe kata van het Goju-Ryu systeem. Het getal 108 heeft een boeddhistische betekenis. Suparinpei combineert alle principes van het systeem.",
+    embusen: "Variabel",
+    kiai_bij: [],
+    stappen: []
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let activeKata = null;
+let currentStep = 0;
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function kyuClass(kyu) {
+  if (kyu === null) return "kyu-dan";
+  return "kyu-" + kyu;
+}
+
+function directionArrow(richting) {
+  if (!richting || richting === "—") return "◉";
+  const r = richting.toLowerCase();
+  if (r.includes("mawate") || r.includes("180"))  return "↩";
+  if (r.includes("achter"))  return "↓";
+  if (r.includes("voor"))    return "↑";
+  if (r.includes("links"))   return "←";
+  if (r.includes("rechts"))  return "→";
+  return "◆";
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "nl-NL";
+  u.rate = 0.92;
+  window.speechSynthesis.speak(u);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DIRECTION SVG — kompas met richting en stapgrootte
+//  angleFrom  : oriëntatie bij start van stap (0° = startrichting kata, CW positief)
+//  angleChange: rotatie tijdens stap (positief = CW, negatief = CCW)
+// ═══════════════════════════════════════════════════════
+function directionSVG(angleFrom, angleChange) {
+  const cx = 55, cy = 52, R = 42, rArc = 30;
+  const f = n => n.toFixed(1);
+  // kata-hoek (0=noord/boven, CW positief) → SVG Cartesisch
+  const toX = (deg, r) => cx + r * Math.sin(deg * Math.PI / 180);
+  const toY = (deg, r) => cy - r * Math.cos(deg * Math.PI / 180);
+
+  const ring = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="var(--card)" stroke="var(--border)" stroke-width="1.5"/>`;
+
+  const ticks = [0, 90, 180, 270].map(a =>
+    `<line x1="${f(toX(a,R-1))}" y1="${f(toY(a,R-1))}" x2="${f(toX(a,R-8))}" y2="${f(toY(a,R-8))}" stroke="var(--muted)" stroke-width="1.5" opacity="0.4"/>`
+  ).join('');
+
+  // Subtiele markering startrichting (0° = noord)
+  const startDot = `<circle cx="${cx}" cy="${f(toY(0,R-5))}" r="2.5" fill="var(--muted)" opacity="0.3"/>`;
+
+  // Draai-boog met pijlpunt (accent kleur)
+  let arcSvg = '';
+  if (angleChange !== 0) {
+    const endAngle = angleFrom + angleChange;
+    const sx = toX(angleFrom, rArc), sy = toY(angleFrom, rArc);
+    const ex = toX(endAngle, rArc),  ey = toY(endAngle, rArc);
+    const large = Math.abs(angleChange) > 180 ? 1 : 0;
+    const sweep = angleChange > 0 ? 1 : 0;
+    arcSvg = `<path d="M${f(sx)},${f(sy)} A${rArc},${rArc} 0 ${large} ${sweep} ${f(ex)},${f(ey)}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5,3"/>`;
+    const cw = angleChange > 0;
+    const er = endAngle * Math.PI / 180;
+    const tx = cw ?  Math.cos(er) : -Math.cos(er);
+    const ty = cw ?  Math.sin(er) : -Math.sin(er);
+    const nx = -ty, ny = tx;
+    const ah = 9, aw = 4.5;
+    arcSvg += `<polygon points="${f(ex)},${f(ey)} ${f(ex-tx*ah+nx*aw)},${f(ey-ty*ah+ny*aw)} ${f(ex-tx*ah-nx*aw)},${f(ey-ty*ah-ny*aw)}" fill="var(--accent)"/>`;
+  }
+
+  // Hoofdpijl — richting op angleFrom, draait mee
+  const arrow = `<g transform="rotate(${angleFrom},${cx},${cy})">
+    <line x1="${cx}" y1="${cy}" x2="${cx}" y2="${f(cy-R+10)}" stroke="var(--primary)" stroke-width="3.5" stroke-linecap="round"/>
+    <polygon points="${cx},${f(cy-R+1)} ${f(cx-6)},${f(cy-R+13)} ${f(cx+6)},${f(cy-R+13)}" fill="var(--primary)"/>
+  </g>
+  <circle cx="${cx}" cy="${cy}" r="4" fill="var(--primary)"/>`;
+
+  return `<svg viewBox="0 0 110 100" width="110" height="100" style="display:block;margin:0 auto">
+    ${ring}${ticks}${startDot}${arcSvg}${arrow}
+  </svg>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  OVERVIEW
+// ═══════════════════════════════════════════════════════
+function buildOverview() {
+  const container = document.getElementById("kata-overview-list");
+  container.innerHTML = "";
+
+  const groups = [
+    { label: "Kyu kata",  filter: k => k.kyu !== null },
+    { label: "Dan kata",  filter: k => k.kyu === null },
+  ];
+
+  groups.forEach(group => {
+    const kata = KATA.filter(group.filter);
+    if (!kata.length) return;
+
+    const groupEl = document.createElement("div");
+    groupEl.className = "level-group";
+    groupEl.innerHTML = `<div class="level-label">${group.label}</div>`;
+
+    const grid = document.createElement("div");
+    grid.className = "kata-grid";
+
+    kata.forEach(k => {
+      const hasData = k.stappen.length > 0;
+      const card = document.createElement("div");
+      card.className = "kata-card" + (hasData ? "" : " no-data");
+
+      card.innerHTML = `
+        <div class="kata-card-name">${k.naam}</div>
+        <div class="kata-card-betekenis">${k.betekenis}</div>
+        <div class="kata-card-meta">
+          <span class="kyu-pill ${kyuClass(k.kyu)}">${k.niveau}</span>
+          ${hasData
+            ? `<span class="badge-steps">${k.stappen.length} stappen</span>`
+            : `<span class="badge-coming">binnenkort</span>`
+          }
+        </div>`;
+
+      if (hasData) {
+        card.onclick = () => openKata(k.id);
+      }
+      grid.appendChild(card);
+    });
+
+    groupEl.appendChild(grid);
+    container.appendChild(groupEl);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  DETAIL
+// ═══════════════════════════════════════════════════════
+function openKata(id) {
+  activeKata = KATA.find(k => k.id === id);
+  if (!activeKata) return;
+  currentStep = 0;
+
+  document.getElementById("detail-naam").textContent  = activeKata.naam;
+  document.getElementById("detail-level").textContent = activeKata.niveau + " · " + activeKata.embusen;
+
+  buildSamenvatting();
+  buildStapVoorStap();
+  switchTab("samenvatting", document.querySelector(".tab-btn"));
+
+  showScreen("screen-detail");
+}
+
+function buildSamenvatting() {
+  const k = activeKata;
+  document.getElementById("detail-info").innerHTML =
+    `<strong>${k.naam}</strong> — ${k.betekenis}<br>${k.beschrijving}` +
+    (k.embusen ? `<br><em>Embusen: ${k.embusen}</em>` : "");
+
+  const list = document.getElementById("detail-step-list");
+  const noData = document.getElementById("detail-no-data");
+  list.innerHTML = "";
+
+  if (!k.stappen.length) {
+    list.style.display = "none";
+    noData.style.display = "";
+    return;
+  }
+  noData.style.display = "none";
+  list.style.display = "";
+
+  k.stappen.forEach(s => {
+    const isKiai = k.kiai_bij.includes(s.nr);
+    const li = document.createElement("li");
+    li.className = "step-list-item" + (isKiai ? " step-kiai" : "");
+    li.innerHTML = `
+      <span class="step-nr">${s.tel}</span>
+      <div class="step-list-content">
+        <div class="step-list-tech">
+          ${s.technieken}
+          ${isKiai ? '<span class="kiai-badge">KIAI</span>' : ""}
+        </div>
+        <div class="step-list-cue">${s.cue}</div>
+      </div>`;
+    li.onclick = () => { switchTab("stapvoorstap", document.querySelectorAll(".tab-btn")[1]); goToStep(s.nr - 1); };
+    list.appendChild(li);
+  });
+}
+
+function buildStapVoorStap() {
+  const k = activeKata;
+  const empty   = document.getElementById("step-view-empty");
+  const content = document.getElementById("step-view-content");
+
+  if (!k.stappen.length) {
+    empty.style.display   = "";
+    content.style.display = "none";
+    return;
+  }
+  empty.style.display   = "none";
+  content.style.display = "";
+  renderStep();
+}
+
+// ═══════════════════════════════════════════════════════
+//  STEP NAVIGATION
+// ═══════════════════════════════════════════════════════
+function renderStep() {
+  const k = activeKata;
+  const s = k.stappen[currentStep];
+  const total = k.stappen.length;
+  const isKiai = k.kiai_bij.includes(s.nr);
+
+  document.getElementById("step-counter").textContent = `Stap ${currentStep + 1} van ${total}`;
+  document.getElementById("step-progress-bar").style.width = `${((currentStep + 1) / total) * 100}%`;
+
+  // Kiai
+  const kiaiEl = document.getElementById("kiai-label-el");
+  kiaiEl.style.display = isKiai ? "" : "none";
+
+  // Direction
+  const db = document.getElementById("dir-block");
+  if (s.angleFrom !== undefined) {
+    db.innerHTML = directionSVG(s.angleFrom, s.angleChange || 0) +
+      `<div class="dir-richting">${s.richting || '—'}</div>`;
+  } else {
+    db.innerHTML = `<span class="dir-arrow">${directionArrow(s.richting)}</span>` +
+      `<div class="dir-richting">${s.richting || '—'}</div>`;
+  }
+
+  // Cue
+  const cueEl = document.getElementById("step-cue");
+  cueEl.textContent = s.cue;
+  cueEl.className   = "step-cue" + (isKiai ? " kiai-step" : "");
+
+  // Tech + stance
+  document.getElementById("step-tech").textContent  = s.technieken || "—";
+  document.getElementById("step-stand").textContent = s.stand || "—";
+  document.getElementById("step-stand-block").style.display = s.stand ? "" : "none";
+
+  // Hints
+  const hints = document.getElementById("step-hints");
+  document.getElementById("step-focus").textContent = s.focus || "";
+  document.getElementById("step-fout").textContent  = s.fout  || "";
+  hints.style.display = (s.focus || s.fout) ? "" : "none";
+
+  // Nav buttons
+  document.getElementById("prev-btn").disabled = currentStep === 0;
+  document.getElementById("next-btn").textContent = currentStep === total - 1 ? "Klaar ✓" : "Volgende →";
+  document.getElementById("next-btn").disabled = false;
+
+  // Auto-speak
+  if (document.getElementById("autospeak-toggle").checked) {
+    speak(s.cue);
+  }
+}
+
+function changeStep(delta) {
+  const k = activeKata;
+  const newStep = currentStep + delta;
+  if (newStep < 0 || newStep >= k.stappen.length) return;
+  currentStep = newStep;
+  renderStep();
+}
+
+function goToStep(idx) {
+  currentStep = Math.max(0, Math.min(idx, activeKata.stappen.length - 1));
+  renderStep();
+}
+
+function speakCurrent() {
+  if (!activeKata) return;
+  const s = activeKata.stappen[currentStep];
+  speak(s.cue);
+}
+
+// ═══════════════════════════════════════════════════════
+//  SCREEN & TAB SWITCHING
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function showOverview() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  showScreen("screen-overview");
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  document.getElementById("tab-" + id).classList.add("active");
+  if (id === "stapvoorstap" && activeKata && activeKata.stappen.length) renderStep();
+}
+
+// ── Keyboard navigation ──
+document.addEventListener("keydown", e => {
+  if (!document.getElementById("screen-detail").classList.contains("active")) return;
+  if (!document.getElementById("tab-stapvoorstap").classList.contains("active")) return;
+  if (e.key === "ArrowRight" || e.key === "ArrowDown")  changeStep(1);
+  if (e.key === "ArrowLeft"  || e.key === "ArrowUp")    changeStep(-1);
+  if (e.key === " ")  { e.preventDefault(); speakCurrent(); }
+});
+
+// ── Init ──
+buildOverview();
+</script>
+</body>
+</html>

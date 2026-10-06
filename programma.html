@@ -3,288 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Examenprogramma — Fujiyama Hove</title>
+<title>Examenprogramma | Karateclub Fuji Yama Hove</title>
+<link rel="stylesheet" href="site.css">
 <style>
-:root {
-  --maroon: #800000;
-  --maroon-light: #f0e8e8;
-  --maroon-mid: #d0b0b0;
-  --text: #1a1a1a;
-  --muted: #555;
-  --border: #e8e0e0;
-  --bg: #f5f0ec;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  font-size: 14px;
-  color: var(--text);
-  background: var(--bg);
-  line-height: 1.5;
-}
-
-/* ── Layout ─────────────────────────────────────── */
-.wrap {
-  max-width: 860px;
-  margin: 0 auto;
-  background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,.10);
-}
-
-/* ── Header ─────────────────────────────────────── */
-.doc-header {
-  background: var(--maroon);
-  color: #fff;
-  padding: 26px 36px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-.doc-header h1 {
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: .4px;
-  line-height: 1.2;
-}
-.doc-header .sub {
-  font-size: 12px;
-  opacity: .78;
-  margin-top: 3px;
-}
-.doc-header .version {
-  font-size: 11px;
-  opacity: .65;
-  text-align: right;
-  white-space: nowrap;
-}
-
-/* ── Intro bar ───────────────────────────────────── */
+/* Examenprogramma — pagina-specifiek */
+.wrap { padding: 0; }
 .intro {
-  background: #fdf8f5;
-  border-left: 4px solid var(--maroon);
-  padding: 11px 36px;
-  font-size: 12px;
-  color: #555;
-  line-height: 1.65;
+  margin: 30px 38px 0; padding: 12px 16px; background: var(--primary-soft);
+  border-left: 3px solid var(--red); font-size: 14px; line-height: 1.7; color: var(--ink);
 }
-
-/* ── Controls (screen only) ─────────────────────── */
 .controls {
-  padding: 10px 36px;
-  background: #fff;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  margin: 22px 38px 0; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
 }
-.controls label { font-size: 12px; font-weight: 600; color: var(--maroon); }
-.controls select {
-  padding: 4px 10px;
-  border: 1px solid var(--maroon-mid);
-  border-radius: 4px;
-  font-size: 12px;
-  color: var(--text);
-  cursor: pointer;
-  background: #fff;
-}
-#filter-info { font-size: 11px; color: #999; }
+.controls label { color: var(--red); font-size: 11px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+.controls select { font-size: 13px; padding: 7px 12px; cursor: pointer; }
+#filter-info { font-size: 12px; color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0 38px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
 
-/* ── Belt legend (screen only) ─────────────────── */
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  padding: 10px 36px;
-  background: #fafafa;
-  border-bottom: 1px solid var(--border);
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: #555;
-}
-
-/* ── Main body ───────────────────────────────────── */
-.body { padding: 18px 36px 40px; }
-
-/* ── Chapter & section headings ─────────────────── */
+.body { padding: 10px 38px 40px; }
 .chapter {
-  color: var(--maroon);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  margin: 26px 0 10px;
-  padding-bottom: 5px;
-  border-bottom: 2px solid var(--maroon);
+  font: 400 clamp(26px,3vw,34px)/1.15 var(--serif); color: var(--ink);
+  margin: 38px 0 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
 }
-.section {
-  color: var(--maroon);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  margin: 16px 0 6px;
-}
+.section { color: var(--red); font-size: 11px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; margin: 22px 0 8px; }
 
-/* ── Technique tables ────────────────────────────── */
-.tt {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 4px;
-}
+.tt { width: 100%; border-collapse: collapse; margin-bottom: 4px; font-size: 14px; }
 .tt thead th {
-  background: var(--maroon-light);
-  color: var(--maroon);
-  font-size: 9.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .4px;
-  padding: 4px 8px;
-  text-align: left;
-  border-bottom: 1px solid var(--maroon-mid);
+  color: var(--red); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--red); background: transparent;
 }
-.tt td {
-  padding: 4.5px 8px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
+.tt td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
 .tt tbody tr:last-child td { border-bottom: none; }
-.tt tbody tr:hover { background: #fdf8f5; }
+.tt tbody tr:hover { background: var(--primary-soft); }
 .tt tr.hidden { display: none !important; }
 
-/* kyu badge */
-.kc { width: 40px; text-align: center; }
-.kb {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 17px;
-  border-radius: 3px;
-  font-size: 9.5px;
-  font-weight: 700;
-}
-.k9  { background: #fff; border: 1.5px solid #555; color: #333; }
-.k8  { background: #FFD700; border: 1.5px solid #FFD700; color: #222; }
-.k7  { background: #FFD700; border: 1.5px solid #555; color: #222; }
-.k6  { background: #FF8C00; border: 1.5px solid #FF8C00; color: #fff; }
-.k5  { background: #2e7d32; border: 1.5px solid #2e7d32; color: #fff; }
-.k4  { background: #1565c0; border: 1.5px solid #1565c0; color: #fff; }
-.k3  { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
-.k2  { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
-.k1  { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
-.kd  { background: #111; border: 1.5px solid #111; color: #fff; }
+.kc { width: 44px; text-align: center; }
+.kb { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 17px; font-size: 9.5px; font-weight: 700; }
+.k9 { background: #fff; border: 1.5px solid #555; color: #333; }
+.k8 { background: #FFD700; border: 1.5px solid #FFD700; color: #222; }
+.k7 { background: #FFD700; border: 1.5px solid #555; color: #222; }
+.k6 { background: #FF8C00; border: 1.5px solid #FF8C00; color: #fff; }
+.k5 { background: #2e7d32; border: 1.5px solid #2e7d32; color: #fff; }
+.k4 { background: #1565c0; border: 1.5px solid #1565c0; color: #fff; }
+.k3, .k2, .k1 { background: #6d3b1b; border: 1.5px solid #6d3b1b; color: #fff; }
+.kd { background: #111; border: 1.5px solid #111; color: #fff; }
 
-/* technique name & description */
-.tn { font-weight: 600; font-size: 12.5px; width: 210px; }
-.td { color: var(--muted); font-size: 11.5px; }
+.tn { font-weight: 700; font-size: 13.5px; width: 230px; }
+.td { color: var(--muted); font: italic 14px/1.5 var(--serif); }
 
-/* ── Vocabulary ──────────────────────────────────── */
-.vocab-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px 20px;
-  margin-top: 6px;
-}
-@media (max-width: 600px) {
+.vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; margin-top: 10px; }
+.vi { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.vt { font-weight: 700; min-width: 130px; }
+.vd { color: var(--muted); font: italic 14px/1.5 var(--serif); }
+
+.doc-foot { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; padding: 16px; border-top: 1px solid var(--line); }
+
+@media (max-width: 700px) {
+  .intro, .controls, .legend { margin-left: 18px; margin-right: 18px; }
+  .body { padding: 6px 18px 30px; }
   .vocab-grid { grid-template-columns: 1fr; }
-}
-.vi {
-  display: flex;
-  gap: 8px;
-  padding: 3.5px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 12px;
-}
-.vt { font-weight: 600; min-width: 130px; color: var(--text); }
-.vd { color: var(--muted); font-size: 11.5px; }
-
-/* ── Footer ──────────────────────────────────────── */
-footer {
-  text-align: center;
-  font-size: 10px;
-  color: #bbb;
-  padding: 14px;
-  border-top: 1px solid var(--border);
+  .tn { width: auto; }
+  .tt td { padding: 7px 6px; }
 }
 
-/* ═══════════════════════════════════════════════════
-   PRINT
-   ═══════════════════════════════════════════════════ */
 @media print {
-  body { background: #fff; font-size: 8.5pt; }
-
-  .wrap { max-width: 100%; margin: 0; box-shadow: none; }
-
-  .no-print { display: none !important; }
-
-  .doc-header {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    padding: 12px 18px 10px;
-  }
-  .doc-header h1 { font-size: 14pt; }
-  .doc-header .sub { font-size: 8.5pt; }
-
-  .intro { padding: 7px 18px; font-size: 7.5pt; }
-
-  .body { padding: 6px 18px 20px; }
-
-  .chapter {
-    font-size: 11pt;
-    margin: 12px 0 5px;
-    page-break-after: avoid;
-  }
-  .section {
-    font-size: 8pt;
-    margin: 8px 0 3px;
-    page-break-after: avoid;
-  }
-
+  body { font-size: 8.5pt; }
+  .page-hero h1::after { content: " — Fuji Yama Hove"; font-size: 12pt; color: var(--muted); }
+  .intro { margin: 6px 0 0; padding: 6px 10px; font-size: 7.5pt; }
+  .body { padding: 4px 0 10px; }
+  .chapter { font-size: 13pt; margin: 12px 0 4px; padding-bottom: 3px; page-break-after: avoid; }
+  .section { font-size: 7pt; margin: 8px 0 3px; page-break-after: avoid; }
   .tt { font-size: 7.5pt; }
-  .tt thead th { padding: 2.5px 5px; font-size: 6.5pt; }
+  .tt thead th { padding: 2px 5px; font-size: 6pt; }
   .tt td { padding: 2.5px 5px; }
   .tt tbody tr { page-break-inside: avoid; }
   .tt tbody tr:hover { background: none; }
-
-  .kb {
-    width: 20px; height: 14px; font-size: 7pt;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+  .kb { width: 20px; height: 14px; font-size: 7pt; }
   .tn { font-size: 7.5pt; width: 160px; }
-  .td { font-size: 7pt; }
-
+  .td, .vd { font-size: 7pt; }
   .vocab-grid { grid-template-columns: 1fr 1fr; }
   .vi { font-size: 7.5pt; padding: 2px 0; }
-  .vt { min-width: 110px; font-size: 7.5pt; }
-  .vd { font-size: 7pt; }
-
-  footer { font-size: 7pt; padding: 6px; }
-
+  .vt { min-width: 110px; }
+  .doc-foot { font-size: 6.5pt; padding: 6px; }
   .pb { page-break-before: always; }
-
   @page { size: A4; margin: 11mm 13mm; }
 }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="topbar"><div>Sportpark Hove &nbsp; | &nbsp; P. van Ostaijenlaan 6, 2540 Hove</div><div><a href="mailto:info@fujiyamahove.be">info@fujiyamahove.be</a></div></div>
+<header class="navwrap"><a class="brand" href="index.html">Fuji Yama Hove</a><button class="menu" aria-label="Menu openen" aria-expanded="false">☰</button><nav><a href="index.html">HOME</a><a class="active" href="programma.html">PROGRAMMA</a><a href="kata.html">KATA</a><a href="quiz.html">QUIZ</a></nav></header>
+<section class="page-hero"><div><span class="kicker">LEDENZONE · EXAMENPROGRAMMA · VERSIE 05.2026</span><h1>Examenprogramma</h1><p>Standen, afweer, hand- en voettechnieken, kata en woordenlijst — filterbaar per kyu-graad en afdrukbaar op A4.</p></div><img src="assets/goju-ryu-kanji.png" alt="Gōjū-Ryū in Japanse kanji"></section>
 
-<!-- ─── HEADER ─────────────────────────────────────── -->
-<header class="doc-header">
-  <div>
-    <h1>Examenprogramma Fujiyama Hove</h1>
-    <div class="sub">Goju-Ryu Karate &nbsp;·&nbsp; VKA</div>
-  </div>
-  <div class="version">(versie 05.2026)</div>
-</header>
+<main class="container">
+<div class="card wrap">
 
 <div class="intro">
   Dit programma is een richtlijn. Slagen voor een examen omvat meer dan de kennis van individuele technieken.
@@ -554,11 +368,13 @@ footer {
 
 </div><!-- /body -->
 
-<footer>
-  Fujiyama Hove &nbsp;·&nbsp; Goju-Ryu Karate &nbsp;·&nbsp; VKA &nbsp;·&nbsp; versie 05.2026
-</footer>
+<div class="doc-foot">Fuji Yama Hove &nbsp;·&nbsp; Goju-Ryu Karate &nbsp;·&nbsp; VKA &nbsp;·&nbsp; versie 05.2026</div>
 
 </div><!-- /wrap -->
+</main>
+
+<footer class="site-footer"><div><strong>Karateclub Fuji Yama Hove</strong><span>Sportpark Hove · P. van Ostaijenlaan 6 · 2540 Hove</span></div><div><span>Gōjū-ryū Karate · Zelfverdediging</span><span>Sinds 1999</span><a href="mailto:info@fujiyamahove.be">✉ info@fujiyamahove.be</a></div></footer>
+
 
 <script>
 function filterKyu(val) {
@@ -587,5 +403,6 @@ function filterKyu(val) {
   info.textContent = visible + ' technieken';
 }
 </script>
+<script src="site.js"></script>
 </body>
 </html>

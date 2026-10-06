@@ -2,208 +2,58 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Fujiyama Hove — Goju-Ryu Karate</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuji Yama Hove | Programma, Quiz &amp; Kata</title>
+<link rel="stylesheet" href="site.css">
 <style>
-  :root {
-    --bg: #ede4d0;
-    --bg-soft: #f5efe3;
-    --card: #fbf7ee;
-    --text: #3a2e22;
-    --muted: #7a6b58;
-    --primary: #8b2c2c;
-    --primary-hover: #6f2222;
-    --primary-soft: #f4e6e3;
-    --accent: #c19a3e;
-    --border: #d9cdb4;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: "Georgia", "Times New Roman", serif;
-    background: var(--bg);
-    background-image:
-      radial-gradient(circle at 15% 20%, rgba(139,44,44,0.05) 0, transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(193,154,62,0.07) 0, transparent 45%);
-    color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 32px 20px 48px;
-  }
-  .container { width: 100%; max-width: 600px; }
-
-  /* ── Header ── */
-  .dojo-header {
-    text-align: center;
-    margin-bottom: 32px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--primary);
-    position: relative;
-  }
-  .dojo-header::after {
-    content: "";
-    display: block;
-    width: 60px;
-    height: 2px;
-    background: var(--primary);
-    margin: 8px auto 0;
-  }
-  .dojo-header .kanji {
-    font-size: 38px;
-    color: var(--primary);
-    letter-spacing: 10px;
-    line-height: 1;
-    margin-bottom: 10px;
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "MS Mincho", serif;
-  }
-  .dojo-header .dojo-name {
-    font-size: 24px;
-    color: var(--primary);
-    letter-spacing: 6px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-  .dojo-header .dojo-sub {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-top: 8px;
-    font-style: italic;
-  }
-
-  /* ── Nav cards ── */
-  .nav-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .nav-card {
-    display: block;
-    text-decoration: none;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 30px 36px;
-    box-shadow: 0 4px 24px rgba(58,46,34,0.10);
-    position: relative;
-    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
-    overflow: hidden;
-  }
-  .nav-card::before {
-    content: "";
-    position: absolute;
-    top: 10px; left: 10px; right: 10px; bottom: 10px;
-    border: 1px solid rgba(139,44,44,0.12);
-    border-radius: 2px;
-    pointer-events: none;
-  }
-  .nav-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(58,46,34,0.16);
-    border-color: var(--primary);
-  }
-  .nav-card:hover .card-arrow { opacity: 1; transform: translateX(0); }
-
-  .card-icon {
-    font-size: 28px;
-    margin-bottom: 12px;
-    display: block;
-    line-height: 1;
-  }
-  .card-title {
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-  .card-desc {
-    font-size: 13px;
-    color: var(--muted);
-    font-style: italic;
-    line-height: 1.6;
-    margin: 0;
-  }
-  .card-arrow {
-    position: absolute;
-    right: 28px;
-    top: 50%;
-    transform: translateY(-50%) translateX(4px);
-    font-size: 22px;
-    color: var(--primary);
-    opacity: 0;
-    transition: opacity 0.18s, transform 0.18s;
-  }
-
-  /* ── Footer ── */
-  .dojo-footer {
-    text-align: center;
-    margin-top: 32px;
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-style: italic;
-  }
-  .dojo-footer .ornament {
-    color: var(--primary);
-    font-size: 14px;
-    margin: 0 10px;
-    opacity: 0.7;
-  }
-
-  @media (max-width: 480px) {
-    body { padding: 20px 12px 36px; }
-    .dojo-header .dojo-name { font-size: 19px; letter-spacing: 4px; }
-    .dojo-header .kanji { font-size: 30px; letter-spacing: 7px; }
-    .nav-card { padding: 22px 24px; }
-    .card-title { font-size: 17px; }
-    .card-arrow { display: none; }
-  }
+/* Startpagina — pagina-specifiek */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+.nav-card {
+  display: flex; flex-direction: column; text-decoration: none; color: var(--ink);
+  background: var(--card); border: 1px solid var(--border); box-shadow: 0 8px 26px rgba(42,36,31,.06);
+  padding: 30px 28px 28px; transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+.nav-card:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(42,36,31,.10); }
+.nav-card .jp { color: var(--red); font-family: var(--serif); font-size: 30px; line-height: 1; margin-bottom: 14px; }
+.nav-card h2 { font: 400 24px/1.2 var(--serif); letter-spacing: .5px; margin: 0 0 10px; }
+.nav-card p { color: var(--muted); font-size: 14px; line-height: 1.6; margin: 0 0 20px; flex: 1; }
+.nav-card .more { color: var(--red); font-size: 12px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } .cards .nav-card:last-child { grid-column: 1 / -1; } }
+@media (max-width: 560px) { .cards { grid-template-columns: 1fr; gap: 16px; } .cards .nav-card:last-child { grid-column: auto; } }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="topbar"><div>Sportpark Hove &nbsp; | &nbsp; P. van Ostaijenlaan 6, 2540 Hove</div><div><a href="mailto:info@fujiyamahove.be">info@fujiyamahove.be</a></div></div>
+<header class="navwrap"><a class="brand" href="index.html">Fuji Yama Hove</a><button class="menu" aria-label="Menu openen" aria-expanded="false">☰</button><nav><a class="active" href="index.html">HOME</a><a href="programma.html">PROGRAMMA</a><a href="kata.html">KATA</a><a href="quiz.html">QUIZ</a></nav></header>
+<section class="page-hero"><div><span class="kicker">LEDENZONE · INTERACTIEF</span><h1>Fuji Yama Hove</h1><p>Het examenprogramma, de quiz en de kata-gids van onze Gōjū-Ryū karateclub — om thuis te oefenen en je voor te bereiden op je volgende graad.</p></div><img src="assets/goju-ryu-kanji.png" alt="Gōjū-Ryū in Japanse kanji"></section>
 
-  <div class="dojo-header">
-    <div class="kanji">富士山</div>
-    <div class="dojo-name">Fuji Yama Hove</div>
-    <div class="dojo-sub">Goju-Ryu Karate Dojo</div>
-  </div>
-
-  <div class="nav-cards">
+<main class="container">
+  <span class="kicker">ONTDEK</span>
+  <h2 class="screen-title">Oefenen &amp; voorbereiden</h2>
+  <p class="screen-sub">Kies waarmee je aan de slag wilt.</p>
+  <div class="cards">
     <a class="nav-card" href="programma.html">
-      <span class="card-icon">📋</span>
-      <div class="card-title">Fujiyama Hove Karate programma</div>
-      <p class="card-desc">Het volledige examenprogramma — standen, afweer, hand- en voettechnieken, kata en woordenlijst. Filterbaar per kyu-graad, afdrukbaar op A4.</p>
-      <span class="card-arrow">→</span>
+      <span class="jp">級</span>
+      <h2>Examenprogramma</h2>
+      <p>Het volledige examenprogramma — standen, afweer, hand- en voettechnieken, kata en woordenlijst. Filterbaar per kyu-graad, afdrukbaar op A4.</p>
+      <span class="more">Bekijk programma →</span>
     </a>
-
     <a class="nav-card" href="quiz.html">
-      <span class="card-icon">🥋</span>
-      <div class="card-title">Probeer onze online programma quiz!</div>
-      <p class="card-desc">Test je kennis van het Goju-Ryu gradenprogramma. Kies je gordelniveau en categorie — en zie hoe goed je het programma kent.</p>
-      <span class="card-arrow">→</span>
+      <span class="jp">問</span>
+      <h2>Programma quiz</h2>
+      <p>Test je kennis van het Gōjū-Ryū gradenprogramma. Kies je gordel en categorie — en zie hoe goed je het programma kent.</p>
+      <span class="more">Start de quiz →</span>
     </a>
-
     <a class="nav-card" href="kata.html">
-      <span class="card-icon">🥷</span>
-      <div class="card-title">Kata Gids</div>
-      <p class="card-desc">Stap voor stap door de Goju-Ryu kata — met uitleg per beweging en tekst-naar-spraak ondersteuning.</p>
-      <span class="card-arrow">→</span>
+      <span class="jp">型</span>
+      <h2>Kata gids</h2>
+      <p>Stap voor stap door de Gōjū-Ryū kata — met uitleg per beweging, richting en tekst-naar-spraak ondersteuning.</p>
+      <span class="more">Open de kata gids →</span>
     </a>
   </div>
+</main>
 
-  <div class="dojo-footer">
-    <span class="ornament">❖</span>Fuji Yama Hove<span class="ornament">❖</span>Goju-Ryu Karate<span class="ornament">❖</span>
-  </div>
-
-</div>
+<footer class="site-footer"><div><strong>Karateclub Fuji Yama Hove</strong><span>Sportpark Hove · P. van Ostaijenlaan 6 · 2540 Hove</span></div><div><span>Gōjū-ryū Karate · Zelfverdediging</span><span>Sinds 1999</span><a href="mailto:info@fujiyamahove.be">✉ info@fujiyamahove.be</a></div></footer>
+<script src="site.js"></script>
 </body>
 </html>

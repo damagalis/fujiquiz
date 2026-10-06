@@ -3,411 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kata Gids — Fujiyama Hove</title>
+<title>Kata Gids | Karateclub Fuji Yama Hove</title>
+<link rel="stylesheet" href="site.css">
 <style>
-:root {
-  --bg: #ede4d0;
-  --bg-soft: #f5efe3;
-  --card: #fbf7ee;
-  --text: #3a2e22;
-  --muted: #7a6b58;
-  --primary: #8b2c2c;
-  --primary-hover: #6f2222;
-  --primary-soft: #f4e6e3;
-  --accent: #c19a3e;
-  --accent-soft: rgba(193,154,62,0.12);
-  --border: #d9cdb4;
-  --correct: #4a6b3a;
-  --correct-bg: #e7eddc;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: "Georgia", "Times New Roman", serif;
-  background: var(--bg);
-  background-image:
-    radial-gradient(circle at 15% 20%, rgba(139,44,44,0.05) 0, transparent 40%),
-    radial-gradient(circle at 85% 80%, rgba(193,154,62,0.07) 0, transparent 45%);
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
-  padding: 24px 16px 48px;
-}
-.container { width: 100%; max-width: 720px; margin: 0 auto; }
-
-/* ── Dojo header ── */
-.dojo-header {
-  text-align: center;
-  margin-bottom: 28px;
-  padding-bottom: 18px;
-  border-bottom: 2px solid var(--primary);
-  position: relative;
-}
-.dojo-header::after {
-  content: "";
-  display: block;
-  width: 60px; height: 2px;
-  background: var(--primary);
-  margin: 7px auto 0;
-}
-.kanji { font-size: 32px; color: var(--primary); letter-spacing: 8px; line-height: 1; margin-bottom: 6px; font-family: "Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif; }
-.dojo-name { font-size: 20px; color: var(--primary); letter-spacing: 5px; font-weight: 700; text-transform: uppercase; }
-.dojo-sub { font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 5px; font-style: italic; }
-
-/* ── Card ── */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 28px 32px;
-  box-shadow: 0 4px 24px rgba(58,46,34,.10);
-  position: relative;
-}
-.card::before {
-  content: "";
-  position: absolute;
-  top: 9px; left: 9px; right: 9px; bottom: 9px;
-  border: 1px solid rgba(139,44,44,.13);
-  border-radius: 2px;
-  pointer-events: none;
-}
-.card > * { position: relative; z-index: 1; }
-
-/* ── Buttons ── */
-button.primary {
-  background: var(--primary);
-  color: #fbf7ee;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 3px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all .18s;
-  box-shadow: 0 2px 6px rgba(139,44,44,.18);
-}
-button.primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
-button.primary:disabled { background: #b9a98c; cursor: not-allowed; transform: none; box-shadow: none; }
-button.ghost {
-  background: transparent;
-  color: var(--primary);
-  border: 1.5px solid var(--border);
-  padding: 9px 18px;
-  border-radius: 3px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all .15s;
-}
-button.ghost:hover { border-color: var(--primary); background: var(--primary-soft); }
-button.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 50%;
-  font-size: 20px;
-  line-height: 1;
-  transition: background .15s;
-  color: var(--primary);
-}
-button.icon-btn:hover { background: var(--primary-soft); }
-
-/* ── Screen visibility ── */
+/* Kata Gids — pagina-specifiek (gedeelde stijl in site.css) */
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ══════════════════════════════════════
-   OVERVIEW SCREEN
-   ══════════════════════════════════════ */
-.screen-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 6px;
-  letter-spacing: .5px;
-}
-.screen-title::after {
-  content: "";
-  display: block;
-  width: 44px; height: 3px;
-  background: var(--primary);
-  margin-top: 8px; margin-bottom: 4px;
-}
-.screen-sub { color: var(--muted); font-style: italic; font-size: 14px; margin-bottom: 22px; }
-
-.level-group { margin-bottom: 22px; }
+.level-group { margin-bottom: 30px; }
 .level-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--muted);
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
+  color: var(--red); font-size: 11px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase;
+  margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
 }
-
-.kata-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-}
+.kata-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .kata-card {
-  background: #fff;
-  border: 1.5px solid var(--border);
-  border-radius: 3px;
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: all .16s;
-  text-align: left;
+  background: rgba(255,255,255,.55); border: 1px solid var(--border);
+  padding: 20px 22px; cursor: pointer; text-align: left; transition: border-color .15s, box-shadow .15s, transform .15s;
 }
-.kata-card:hover { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139,44,44,.12); }
-.kata-card.no-data { opacity: .65; cursor: default; }
-.kata-card.no-data:hover { transform: none; box-shadow: none; border-color: var(--border); background: #fff; }
-.kata-card-name { font-size: 13.5px; font-weight: 700; color: var(--primary); letter-spacing: .3px; margin-bottom: 3px; }
-.kata-card-betekenis { font-size: 11.5px; color: var(--muted); font-style: italic; margin-bottom: 6px; line-height: 1.4; }
-.kata-card-meta { display: flex; align-items: center; gap: 6px; }
-.kyu-pill {
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 10px;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-}
-.badge-steps { font-size: 10px; color: var(--muted); }
-.badge-coming { font-size: 10px; color: #bbb; font-style: italic; }
+.kata-card:hover { border-color: var(--red); box-shadow: 0 8px 22px rgba(42,36,31,.08); transform: translateY(-2px); }
+.kata-card.no-data { opacity: .6; cursor: default; }
+.kata-card.no-data:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.kata-card-name { font: 400 21px/1.2 var(--serif); color: var(--ink); margin-bottom: 4px; }
+.kata-card-betekenis { font: italic 14px/1.4 var(--serif); color: var(--red); margin-bottom: 12px; }
+.kata-card-meta { display: flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid var(--line); }
+.kyu-pill { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 8px; letter-spacing: .6px; text-transform: uppercase; }
+.badge-steps { font-size: 11px; color: var(--muted); }
+.badge-coming { font-size: 11px; color: #a39b91; font-style: italic; }
 
-/* ══════════════════════════════════════
-   KATA DETAIL — top bar
-   ══════════════════════════════════════ */
-.detail-topbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+/* ══ DETAIL ══ */
+.detail-topbar { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
 .back-btn {
-  font-size: 18px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--primary);
-  padding: 4px 8px;
-  border-radius: 3px;
-  font-family: inherit;
-  font-weight: 700;
-  transition: background .15s;
-  letter-spacing: 0;
+  background: none; border: 1px solid var(--red); color: var(--red); cursor: pointer; font-family: inherit;
+  font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 9px 13px; transition: background .15s;
 }
 .back-btn:hover { background: var(--primary-soft); }
-.detail-kata-name { font-size: 18px; font-weight: 700; color: var(--primary); letter-spacing: .5px; flex: 1; }
-.detail-kata-level { font-size: 11px; color: var(--muted); font-style: italic; }
+.detail-kata-name { font: 400 clamp(26px,3.2vw,36px)/1.1 var(--serif); color: var(--ink); }
+.detail-kata-level { font: italic 14px var(--serif); color: var(--red); margin-top: 3px; }
 
-/* Tabs */
-.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+.tabs { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
 .tab-btn {
-  background: none;
-  border: none;
-  padding: 9px 18px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color .15s, border-color .15s;
+  background: transparent; border: 1px solid var(--red); color: var(--red);
+  padding: 10px 15px; font-family: inherit; font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: background .15s, color .15s;
 }
-.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-.tab-btn:hover:not(.active) { color: var(--text); }
+.tab-btn:hover:not(.active) { background: var(--primary-soft); }
+.tab-btn.active { background: var(--red); color: #fff; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-/* ══════════════════════════════════════
-   SAMENVATTING TAB
-   ══════════════════════════════════════ */
+/* Samenvatting */
 .kata-info-block {
-  background: var(--accent-soft);
-  border-left: 3px solid var(--accent);
-  padding: 10px 14px;
-  border-radius: 2px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.6;
+  padding: 12px 16px; margin-bottom: 20px; background: var(--primary-soft);
+  border-left: 3px solid var(--red); font-size: 14px; line-height: 1.7; color: var(--ink);
 }
-.kata-info-block strong { color: var(--primary); }
-
-.step-list { list-style: none; }
-.step-list-item {
-  display: flex;
-  gap: 12px;
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  align-items: flex-start;
-  transition: background .12s;
-}
+.kata-info-block strong { color: var(--red); }
+.step-list { list-style: none; border-top: 1px solid var(--line); }
+.step-list-item { display: flex; gap: 14px; padding: 11px 8px; border-bottom: 1px solid var(--line); font-size: 14px; align-items: flex-start; transition: background .12s; }
 .step-list-item:hover { background: var(--primary-soft); }
-.step-list-item:last-child { border-bottom: none; }
-.step-nr {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--muted);
-  min-width: 28px;
-  padding-top: 2px;
-  text-align: right;
-}
-.step-kiai .step-nr { color: var(--primary); }
-.step-list-tech { font-weight: 600; color: var(--text); }
-.step-list-cue { font-size: 11.5px; color: var(--muted); font-style: italic; }
-.kiai-badge { display: inline-block; background: var(--primary); color: #fff; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 8px; vertical-align: middle; margin-left: 6px; letter-spacing: .5px; }
+.step-nr { font: 400 15px var(--serif); color: var(--muted); min-width: 28px; text-align: right; }
+.step-kiai .step-nr { color: var(--red); font-weight: 700; }
+.step-list-tech { font-weight: 700; color: var(--ink); }
+.step-list-cue { font: italic 14px/1.5 var(--serif); color: var(--muted); }
+.kiai-badge { display: inline-block; background: var(--red); color: #fff; font-size: 9px; font-weight: 700; padding: 2px 7px; vertical-align: middle; margin-left: 6px; letter-spacing: 1px; }
 
-/* ══════════════════════════════════════
-   STAP VOOR STAP TAB
-   ══════════════════════════════════════ */
-.step-controls-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-  gap: 10px;
-}
-.step-counter { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-.autospeak-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--muted);
-  cursor: pointer;
-  user-select: none;
-}
-.autospeak-toggle input { accent-color: var(--primary); cursor: pointer; }
+/* Stap voor stap */
+#tab-stapvoorstap { max-width: 640px; margin: 0 auto; }
+.step-controls-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+.step-counter { color: var(--red); font-size: 11px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+.autospeak-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer; user-select: none; }
+.autospeak-toggle input { accent-color: var(--red); cursor: pointer; }
+.step-progress { height: 3px; background: var(--line); margin-bottom: 22px; overflow: hidden; }
+.step-progress-bar { height: 100%; background: var(--red); transition: width .3s; }
 
-.step-progress {
-  height: 3px;
-  background: var(--border);
-  border-radius: 2px;
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-.step-progress-bar { height: 100%; background: var(--primary); transition: width .3s; }
+.dir-block { text-align: center; margin-bottom: 16px; padding: 14px 16px 12px; background: rgba(255,255,255,.5); border: 1px solid var(--border); }
+.dir-arrow { display: block; font-size: 52px; line-height: 1; color: var(--red); }
+.dir-richting { font: italic 14px var(--serif); color: var(--muted); margin-top: 4px; }
 
-/* Direction indicator */
-.dir-block {
-  text-align: center;
-  margin-bottom: 14px;
-  padding: 12px 16px 10px;
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-}
-.dir-arrow {
-  display: block;
-  font-size: 52px;
-  line-height: 1;
-  color: var(--primary);
-}
-.dir-richting {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  color: var(--muted);
-  margin-top: 4px;
-  font-style: italic;
-}
-
-/* Main cue */
 .step-cue {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--primary);
-  line-height: 1.3;
-  padding: 16px 18px;
-  background: rgba(139,44,44,.05);
-  border-left: 4px solid var(--primary);
-  border-radius: 2px;
-  margin-bottom: 14px;
-  min-height: 80px;
-  display: flex;
-  align-items: center;
+  font: 400 26px/1.3 var(--serif); color: var(--ink);
+  padding: 18px 20px; background: rgba(255,255,255,.5); border-left: 3px solid var(--red);
+  margin-bottom: 16px; min-height: 84px; display: flex; align-items: center;
 }
-.step-cue.kiai-step { border-left-color: var(--accent); background: var(--accent-soft); color: var(--text); }
-.kiai-label {
-  display: inline-block;
-  background: var(--primary);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 10px;
-  border-radius: 10px;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
+.step-cue.kiai-step { border-left-color: var(--accent); background: var(--accent-soft); }
+.kiai-label { display: inline-block; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 12px; letter-spacing: 2px; margin-bottom: 10px; }
 
-/* Technique + stance */
-.step-tech-block {
-  padding: 10px 14px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  margin-bottom: 12px;
-  font-size: 13px;
-}
-.step-tech-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 3px; }
-.step-tech-value { font-weight: 600; color: var(--text); }
+.step-tech-block { padding: 11px 16px; background: rgba(255,255,255,.5); border: 1px solid var(--border); margin-bottom: 12px; font-size: 14px; }
+.step-tech-label { color: var(--red); font-size: 10px; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; margin-bottom: 3px; }
+.step-tech-value { font-weight: 700; color: var(--ink); }
 
-/* Focus & fout */
-.step-hints { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-.hint-box { padding: 8px 12px; border-radius: 3px; font-size: 12px; line-height: 1.5; }
-.hint-focus { background: var(--correct-bg); border-left: 3px solid var(--correct); color: #2e4a22; }
-.hint-fout  { background: var(--primary-soft); border-left: 3px solid var(--primary); color: var(--primary); }
-.hint-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 2px; opacity: .7; }
+.step-hints { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.hint-box { padding: 10px 14px; font-size: 13px; line-height: 1.55; }
+.hint-focus { background: var(--correct-bg); border-left: 3px solid var(--correct); color: #3d4f30; }
+.hint-fout  { background: var(--primary-soft); border-left: 3px solid var(--red); color: #7e3c30; }
+.hint-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px; opacity: .8; }
 
-/* Step nav */
-.step-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 6px;
-}
-.speak-btn { font-size: 22px; }
+.step-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
 .step-nav-arrows { display: flex; gap: 8px; }
 
-/* No-data state */
-.no-data-msg {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--muted);
-  font-style: italic;
-  font-size: 14px;
-  line-height: 1.8;
-}
+.no-data-msg { text-align: center; padding: 40px 20px; color: var(--muted); font: italic 15px/1.8 var(--serif); }
 
-/* Footer */
-.dojo-footer {
-  text-align: center;
-  margin-top: 28px;
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  font-style: italic;
-}
-.dojo-footer .ornament { color: var(--primary); font-size: 14px; margin: 0 10px; opacity: .7; }
-
-/* ── Belt pill colors ── */
+/* ── Gordelkleuren ── */
 .kyu-9 { background: #f0f0f0; color: #333; border: 1px solid #aaa; }
 .kyu-8 { background: #FFD700; color: #333; }
 .kyu-7 { background: #FFD700; color: #333; border: 1px solid #888; }
@@ -419,13 +114,12 @@ button.icon-btn:hover { background: var(--primary-soft); }
 .kyu-1 { background: #6d3b1b; color: #fff; }
 .kyu-dan { background: #111; color: #fff; }
 
-/* ── Responsive ── */
 @media (max-width: 560px) {
-  body { padding: 16px 10px 36px; }
-  .card { padding: 20px 18px; }
   .step-cue { font-size: 21px; }
   .step-hints { grid-template-columns: 1fr; }
-  .kata-grid { grid-template-columns: 1fr 1fr; }
+  .kata-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kata-card { padding: 14px 14px; }
+  .kata-card-name { font-size: 17px; }
 }
 @media (max-width: 380px) {
   .kata-grid { grid-template-columns: 1fr; }
@@ -433,19 +127,19 @@ button.icon-btn:hover { background: var(--primary-soft); }
 </style>
 </head>
 <body>
+<div class="topbar"><div>Sportpark Hove &nbsp; | &nbsp; P. van Ostaijenlaan 6, 2540 Hove</div><div><a href="mailto:info@fujiyamahove.be">info@fujiyamahove.be</a></div></div>
+<header class="navwrap"><a class="brand" href="index.html">Fuji Yama Hove</a><button class="menu" aria-label="Menu openen" aria-expanded="false">☰</button><nav><a href="index.html">HOME</a><a href="programma.html">PROGRAMMA</a><a class="active" href="kata.html">KATA</a><a href="quiz.html">QUIZ</a></nav></header>
+
+<section class="page-hero"><div><span class="kicker">LEDENZONE · KATA GIDS</span><h1>Gōjū-Ryū Kata</h1><p>Kies een kata voor de samenvatting of oefen ze stap voor stap — met richting, techniek, stand en aandachtspunten per tel.</p></div><img src="assets/goju-ryu-kanji.png" alt="Gōjū-Ryū in Japanse kanji"></section>
+
 <div class="container">
 
-  <div class="dojo-header">
-    <div class="kanji">富士山</div>
-    <div class="dojo-name">Fuji Yama Hove</div>
-    <div class="dojo-sub">Goju-Ryu Karate Dojo</div>
-  </div>
-
-  <div class="card">
+<div class="card">
 
     <!-- ══ SCREEN 1: OVERZICHT ══ -->
     <div id="screen-overview" class="screen active">
-      <h1 class="screen-title">Kata Gids</h1>
+      <span class="kicker">OVERZICHT</span>
+      <h2 class="screen-title">Kata per graad</h2>
       <p class="screen-sub">Kies een kata voor de samenvatting en de stap-voor-stap gids.</p>
       <div id="kata-overview-list"></div>
     </div>
@@ -523,13 +217,12 @@ button.icon-btn:hover { background: var(--primary-soft); }
 
   </div><!-- /card -->
 
-  <div class="dojo-footer">
-    <span class="ornament">❖</span>Fuji Yama Hove<span class="ornament">❖</span>Goju-Ryu Karate<span class="ornament">❖</span>
-  </div>
-
 </div><!-- /container -->
 
+<footer class="site-footer"><div><strong>Karateclub Fuji Yama Hove</strong><span>Sportpark Hove · P. van Ostaijenlaan 6 · 2540 Hove</span></div><div><span>Gōjū-ryū Karate · Zelfverdediging</span><span>Sinds 1999</span><a href="mailto:info@fujiyamahove.be">✉ info@fujiyamahove.be</a></div></footer>
+
 <script>
+
 // ═══════════════════════════════════════════════════════
 //  KATA DATA
 //  Stappen volgen het formaat uit het Obsidian kata template.
@@ -1059,5 +752,6 @@ document.addEventListener("keydown", e => {
 // ── Init ──
 buildOverview();
 </script>
+<script src="site.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ The 'AngleFrom' is the orientation at the start of the step,  considering the st
 The 'AngleChange' is the change in orientation,    when it is positive, the direction is clockwise,  when negative,  the direction is anti clockwise
 The 'step' indicates a relative 'short' or 'long' that could be used for visual cues.   short = shoulder length,     long = double shoulder length,   very long = double should length + extra footlength.  
 
-The GUI should follow the same look and feel as used on the programma.html overview and the quiz.   
+The GUI follows the look and feel of the club website (Fuji Yama Hove v23): shared styling lives in site.css (+ site.js for the mobile menu), page-specific styles stay inline.   
 
 these kata  have the steps ready: 
 sanchin
